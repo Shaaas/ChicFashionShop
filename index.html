@@ -3,125 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHIC | Experimental Couture</title>
+    <title>CHIC | The Collective Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Montserrat:wght@100;300;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #050505;
             --text: #ffffff;
             --accent: #d4af37;
-            --glass: rgba(255, 255, 255, 0.03);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; cursor: crosshair; }
+        body { background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+
+        /* Background Effects */
+        .ambient-glow { position: fixed; top: 50%; left: 50%; width: 80vw; height: 80vw; background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%); transform: translate(-50%, -50%); pointer-events: none; z-index: 0; filter: blur(120px); }
+        .bg-watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: 'Italiana', serif; font-size: 35vw; color: rgba(255,255,255,0.01); z-index: -1; white-space: nowrap; pointer-events: none; letter-spacing: -2vw; transition: 0.5s ease-out; }
+
+        /* THE COLLECTIVE TOP NAV */
+        nav { 
+            position: fixed; top: 0; width: 100%; 
+            padding: 25px 5%; 
+            display: flex; justify-content: space-between; align-items: center; 
+            z-index: 2000; 
+            background: rgba(5,5,5,0.85);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .logo { font-family: 'Italiana', serif; font-size: 1.8rem; letter-spacing: 8px; font-weight: 900; cursor: pointer; }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { 
+            text-decoration: none; color: var(--text); font-size: 0.65rem; 
+            letter-spacing: 3px; text-transform: uppercase; opacity: 0.4; 
+            transition: 0.3s; cursor: pointer;
+        }
+        .nav-links a:hover, .nav-links a.active { opacity: 1; color: var(--accent); }
+
+        /* PAGE SYSTEM */
+        .page { 
+            display: none; 
+            padding-top: 140px; 
+            min-height: 100vh;
+            animation: fadeIn 0.8s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+        }
+        .page.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* HERO PAGE STYLE */
+        .hero-content { height: 70vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 0 10%; gap: 5%; }
+        .hero-text h1 { font-family: 'Italiana', serif; font-size: 7vw; line-height: 0.85; text-transform: uppercase; }
+        .hero-img { width: 100%; height: 65vh; object-fit: cover; border: 1px solid rgba(255,255,255,0.1); filter: grayscale(1); }
+
+        /* GRID SYSTEM */
+        .section-header { text-align: center; margin-bottom: 80px; }
+        .section-header h2 { font-family: 'Italiana', serif; font-size: 4rem; letter-spacing: 5px; text-transform: uppercase; }
         
-        body { 
-            background: var(--bg); 
-            color: var(--text); 
-            font-family: 'Montserrat', sans-serif;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
+        .content-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 50px; padding: 0 10% 100px; }
+        .product-card { position: relative; }
+        .img-wrap { overflow: hidden; height: 550px; border: 1px solid rgba(255,255,255,0.05); }
+        .product-card img { width: 100%; height: 100%; object-fit: cover; transition: 1.2s cubic-bezier(0.19, 1, 0.22, 1); filter: brightness(0.8); }
+        .product-card:hover img { transform: scale(1.08); filter: brightness(1); }
+        .card-info { margin-top: 20px; display: flex; justify-content: space-between; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
 
-        /* Atmospheric Backgrounds */
-        .ambient-glow {
-            position: fixed;
-            top: 50%; left: 50%;
-            width: 80vw; height: 80vw;
-            background: radial-gradient(circle, rgba(212, 175, 55, 0.07) 0%, transparent 70%);
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            z-index: 0;
-            filter: blur(120px);
-        }
-
-        .bg-watermark {
-            position: fixed;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            font-family: 'Italiana', serif;
-            font-size: 35vw;
-            color: rgba(255,255,255,0.02);
-            z-index: -1;
-            white-space: nowrap;
-            pointer-events: none;
-            letter-spacing: -2vw;
-            transition: 0.2s ease-out;
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed; top: 0; width: 100%;
-            padding: 40px 8%;
-            display: flex; justify-content: space-between; align-items: center;
-            z-index: 1000;
-            background: linear-gradient(to bottom, rgba(5,5,5,1), transparent);
-        }
-
-        .logo { font-family: 'Italiana', serif; font-size: 2.2rem; letter-spacing: 10px; font-weight: 900; }
-        .nav-links a { text-decoration: none; color: var(--text); font-size: 0.65rem; letter-spacing: 4px; margin-left: 40px; text-transform: uppercase; opacity: 0.5; transition: 0.4s; }
-        .nav-links a:hover { opacity: 1; color: var(--accent); }
-
-        /* Hero Section */
-        .hero {
-            height: 100vh;
-            display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            align-items: center;
-            padding: 0 10%;
-            position: relative;
-        }
-
-        .hero-text h1 {
-            font-family: 'Italiana', serif;
-            font-size: clamp(4rem, 12vw, 10rem);
-            line-height: 0.75;
-            text-transform: uppercase;
-        }
-
-        .hero-img-container img {
-            width: 100%;
-            height: 75vh;
-            object-fit: cover;
-            filter: contrast(1.1) brightness(0.8);
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        /* Press Marquee */
-        .press-section { padding: 60px 0; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); overflow: hidden; white-space: nowrap; background: #000; }
-        .press-track { display: flex; animation: scroll 35s linear infinite; width: calc(300px * 10); }
-        .press-logo { width: 300px; font-family: 'Italiana', serif; font-size: 1.2rem; opacity: 0.2; letter-spacing: 5px; text-align: center; }
-        
-        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(calc(-300px * 5)); } }
-
-        /* Category Menu */
-        .category-showcase { padding: 150px 10%; display: flex; position: relative; }
-        .category-list { width: 100%; z-index: 2; }
-        .cat-item { display: flex; align-items: center; padding: 25px 0; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.4s; }
-        .cat-num { font-size: 0.7rem; color: var(--accent); margin-right: 40px; font-weight: 700; }
-        .cat-title { font-family: 'Italiana', serif; font-size: clamp(2rem, 5vw, 4rem); text-transform: uppercase; color: rgba(255,255,255,0.2); transition: 0.5s; }
-        .cat-item:hover .cat-title, .cat-item.active-filter .cat-title { color: #fff; padding-left: 30px; }
-        .category-preview { position: fixed; top: 25%; right: 10%; width: 25vw; height: 35vw; background-size: cover; background-position: center; pointer-events: none; opacity: 0; transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1); z-index: 1; filter: grayscale(100%) brightness(0.6); }
-
-        /* Gallery */
-        .gallery { padding: 100px 10%; display: grid; grid-template-columns: repeat(12, 1fr); gap: 60px; min-height: 80vh; }
-        .item { position: relative; transition: 0.8s cubic-bezier(0.19, 1, 0.22, 1); }
-        .item.hidden { display: none; opacity: 0; transform: translateY(30px); }
-        .item img { width: 100%; height: auto; border: 1px solid rgba(255,255,255,0.05); }
-        .item-1 { grid-column: 1 / 8; }
-        .item-2 { grid-column: 9 / 13; margin-top: 150px; }
-        .item-details { margin-top: 20px; display: flex; justify-content: space-between; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; opacity: 0.6; }
-
-        /* Footer */
-        footer { padding: 150px 10% 50px; background: #000; border-top: 1px solid rgba(255,255,255,0.05); display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 80px; }
-        .footer-col h4 { font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 30px; color: var(--accent); }
-        .footer-col p, .footer-col a { font-size: 0.8rem; color: rgba(255,255,255,0.4); text-decoration: none; display: block; margin-bottom: 15px; }
-        .social-wrapper { display: flex; gap: 20px; margin-top: 30px; }
-        .social-icon { width: 18px; height: 18px; color: rgba(255,255,255,0.3); transition: 0.3s; }
-        .social-icon:hover { color: var(--accent); transform: translateY(-3px); }
-
-        .reveal { opacity: 0; transform: translateY(40px); transition: 1.5s; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
+        /* FOOTER */
+        footer { padding: 120px 10% 40px; border-top: 1px solid rgba(255,255,255,0.05); background: #000; text-align: center; }
+        .social-icons { display: flex; justify-content: center; gap: 40px; margin-bottom: 40px; }
+        .social-icons a { color: white; opacity: 0.3; transition: 0.3s; width: 20px; }
+        .social-icons a:hover { opacity: 1; color: var(--accent); transform: translateY(-3px); }
     </style>
 </head>
 <body>
@@ -130,112 +78,91 @@
     <div class="bg-watermark" id="watermark">CHIC</div>
 
     <nav>
-        <div class="logo">CHIC</div>
+        <div class="logo" onclick="showPage('home')">CHIC</div>
         <div class="nav-links">
-            <a href="#categories">Explore</a>
-            <a href="#gallery">Collection</a>
-            <a href="#">Cart(0)</a>
+            <a onclick="showPage('new')" class="nav-item">New Arrivals</a>
+            <a onclick="showPage('men')" class="nav-item">Men</a>
+            <a onclick="showPage('women')" class="nav-item">Women</a>
+            <a onclick="showPage('bags')" class="nav-item">Bags</a>
+            <a onclick="showPage('watches')" class="nav-item">Watches</a>
         </div>
     </nav>
 
-    <section class="hero">
-        <div class="hero-text">
-            <p style="letter-spacing: 8px; font-size: 0.6rem; opacity: 0.4; margin-bottom: 20px;">EST. 2026 / PARIS</p>
-            <h1>Shatter<br><span style="margin-left: 15%; color: var(--accent);">Silence</span></h1>
-        </div>
-        <div class="hero-img-container">
-            <img src="https://images.unsplash.com/photo-1539109132314-347f85417bd0?q=80&w=1974">
+    <section id="home" class="page active">
+        <div class="hero-content">
+            <div class="hero-text">
+                <p style="letter-spacing: 12px; opacity: 0.3; margin-bottom: 25px; font-size: 0.7rem;">THE 2026 ARCHIVE</p>
+                <h1>Architectural<br><span style="color: var(--accent);">Silence</span></h1>
+                <button onclick="showPage('new')" style="margin-top: 40px; background: none; border: 1px solid rgba(255,255,255,0.3); color: white; padding: 15px 40px; text-transform: uppercase; letter-spacing: 4px; font-size: 0.6rem; cursor: pointer;">Explore Series</button>
+            </div>
+            <img class="hero-img" src="https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=1976&auto=format&fit=crop" alt="Hero">
         </div>
     </section>
 
-    <section class="press-section">
-        <div class="press-track">
-            <div class="press-logo">VOGUE</div><div class="press-logo">ELLE</div><div class="press-logo">BAZAAR</div><div class="press-logo">THE CUT</div><div class="press-logo">HYPEBEAST</div>
-            <div class="press-logo">VOGUE</div><div class="press-logo">ELLE</div><div class="press-logo">BAZAAR</div><div class="press-logo">THE CUT</div><div class="press-logo">HYPEBEAST</div>
+    <section id="new" class="page">
+        <div class="section-header"><h2>New Arrivals</h2></div>
+        <div class="content-grid">
+            <div class="product-card"><div class="img-wrap"><img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1920"></div><div class="card-info"><span>The Sculpted Coat</span><span>$2,800</span></div></div>
+            <div class="product-card"><div class="img-wrap"><img src="https://images.unsplash.com/photo-1539109132314-347f85417bd0?q=80&w=1974"></div><div class="card-info"><span>Asymmetric Silk</span><span>$1,200</span></div></div>
+            <div class="product-card"><div class="img-wrap"><img src="https://images.unsplash.com/photo-1514316454349-750a7fd3da3a?q=80&w=1974"></div><div class="card-info"><span>Void Trousers</span><span>$950</span></div></div>
         </div>
     </section>
 
-    <section id="categories" class="category-showcase">
-        <div class="category-list">
-            <div class="cat-item active-filter" onclick="filterGallery('all')" data-img="https://images.unsplash.com/photo-1490481651871-ab68de25d43d">
-                <span class="cat-num">01</span><h2 class="cat-title">New Arrivals</h2>
-            </div>
-            <div class="cat-item" onclick="filterGallery('men')" data-img="https://images.unsplash.com/photo-1488161628813-04466f872be2">
-                <span class="cat-num">02</span><h2 class="cat-title">Men</h2>
-            </div>
-            <div class="cat-item" onclick="filterGallery('women')" data-img="https://images.unsplash.com/photo-1534528741775-53994a69daeb">
-                <span class="cat-num">03</span><h2 class="cat-title">Women</h2>
-            </div>
-            <div class="cat-item" onclick="filterGallery('bags')" data-img="https://images.unsplash.com/photo-1548036328-c9fa89d128fa">
-                <span class="cat-num">04</span><h2 class="cat-title">Bags</h2>
-            </div>
-            <div class="cat-item" onclick="filterGallery('watches')" data-img="https://images.unsplash.com/photo-1523275335684-37898b6baf30">
-                <span class="cat-num">05</span><h2 class="cat-title">Watches</h2>
-            </div>
+    <section id="men" class="page">
+        <div class="section-header"><h2>Men</h2></div>
+        <div class="content-grid">
+            <div class="product-card"><div class="img-wrap"><img src="https://images.unsplash.com/photo-1488161628813-04466f872be2?q=80&w=1964"></div><div class="card-info"><span>Monolith Blazer</span><span>$1,900</span></div></div>
+            <div class="product-card"><div class="img-wrap"><img src="https://images.unsplash.com/photo-1504131598085-4cca8500b677?q=80&w=1969"></div><div class="card-info"><span>Raw Edge Shirt</span><span>$650</span></div></div>
+            <div class="product-card"><div class="img-wrap"><img src="https://images.unsplash.com/photo-1617113931034-754673891782?q=80&w=1974"></div><div class="card-info"><span>Obsidian Denim</span><span>$540</span></div></div>
         </div>
-        <div class="category-preview" id="cat-preview"></div>
     </section>
 
-    <section id="gallery" class="gallery">
-        <div class="item item-1 reveal" data-cat="men">
-            <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1920">
-            <div class="item-details"><span>Onyx Sculptor</span><span>$1,200</span></div>
+    <section id="women" class="page">
+        <div class="section-header"><h2>Women</h2></div>
+        <div class="content-grid">
+            <div class="product-card"><div class="img-wrap"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964"></div><div class="card-info"><span>Liquid Silk Gown</span><span>$3,400</span></div></div>
+            <div class="product-card"><div class="img-wrap"><img src="https://images.unsplash.com/photo-1496940850453-bb2597412fca?q=80&w=1974"></div><div class="card-info"><span>The Structured Suit</span><span>$2,100</span></div></div>
+            <div class="product-card"><div class="img-wrap"><img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?q=80&w=2070"></div><div class="card-info"><span>Minimalist Shroud</span><span>$890</span></div></div>
         </div>
-        <div class="item item-2 reveal" data-cat="women">
-            <img src="https://images.unsplash.com/photo-1539109132314-347f85417bd0?q=80&w=1974">
-            <div class="item-details"><span>Silk Trestle</span><span>$850</span></div>
+    </section>
+
+    <section id="bags" class="page">
+        <div class="section-header"><h2>Bags</h2></div>
+        <div class="content-grid">
+            <div class="product-card"><div class="img-wrap"><img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=2069"></div><div class="card-info"><span>The Architect Tote</span><span>$2,200</span></div></div>
+            <div class="product-card"><div class="img-wrap"><img src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=1974"></div><div class="card-info"><span>Obsidian Clutch</span><span>$1,400</span></div></div>
         </div>
-        <div class="item item-1 reveal" data-cat="bags">
-            <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=2069">
-            <div class="item-details"><span>Structure Tote</span><span>$540</span></div>
+    </section>
+
+    <section id="watches" class="page">
+        <div class="section-header"><h2>Watches</h2></div>
+        <div class="content-grid">
+            <div class="product-card"><div class="img-wrap"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1999"></div><div class="card-info"><span>The Onyx Chrono</span><span>$4,800</span></div></div>
+            <div class="product-card"><div class="img-wrap"><img src="https://images.unsplash.com/photo-1509112756314-34a0badb29d4?q=80&w=2070"></div><div class="card-info"><span>Minimalist Dial</span><span>$3,200</span></div></div>
         </div>
     </section>
 
     <footer>
-        <div class="footer-col reveal">
-            <div class="logo" style="margin-bottom: 30px; font-size: 1.2rem;">CHIC</div>
-            <p>Architectural precision for the modern silhouette.</p>
-            <div class="social-wrapper">
-                <a href="#" class="social-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path></svg></a>
-                <a href="#" class="social-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a>
-            </div>
+        <div class="social-icons">
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path></svg></a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a>
         </div>
-        <div class="footer-col reveal"><h4>Navigate</h4><a href="#">Shop</a><a href="#">Size Guide</a><a href="#">Returns</a></div>
-        <div class="footer-col reveal"><h4>Contact</h4><a href="#">Instagram</a><a href="#">Press</a><a href="#">Email</a></div>
+        <p style="font-size: 0.6rem; letter-spacing: 5px; opacity: 0.2;">CHIC © 2026 — GLOBAL ARCHIVE</p>
     </footer>
 
     <script>
-        const watermark = document.getElementById('watermark');
-        const preview = document.getElementById('cat-preview');
-        const catItems = document.querySelectorAll('.cat-item');
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
 
+        const watermark = document.getElementById('watermark');
         window.addEventListener('scroll', () => {
             const scrolled = window.pageYOffset;
-            watermark.style.letterSpacing = (scrolled * 0.05 - 2) + 'vw';
-            document.querySelectorAll('.reveal').forEach(el => {
-                if (el.getBoundingClientRect().top < window.innerHeight - 50) el.classList.add('active');
-            });
+            watermark.style.letterSpacing = (scrolled * 0.04 - 2) + 'vw';
         });
-
-        catItems.forEach(item => {
-            item.addEventListener('mouseenter', () => {
-                preview.style.backgroundImage = `url(${item.getAttribute('data-img')})`;
-                preview.style.opacity = "0.5";
-            });
-            item.addEventListener('mouseleave', () => preview.style.opacity = "0");
-        });
-
-        function filterGallery(category) {
-            catItems.forEach(el => el.classList.remove('active-filter'));
-            event.currentTarget.classList.add('active-filter');
-            document.querySelectorAll('.item').forEach(item => {
-                if (category === 'all' || item.getAttribute('data-cat') === category) {
-                    item.classList.remove('hidden');
-                } else {
-                    item.classList.add('hidden');
-                }
-            });
-        }
     </script>
 </body>
 </html>
