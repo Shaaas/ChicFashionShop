@@ -15,55 +15,54 @@
         .bg-watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: 'Italiana', serif; font-size: 35vw; color: rgba(255,255,255,0.01); z-index: -1; white-space: nowrap; pointer-events: none; letter-spacing: -2vw; transition: 0.3s; }
 
         /* NAVIGATION */
-        nav { position: fixed; top: 0; width: 100%; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; z-index: 2000; background: rgba(5,5,5,0.9); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .logo { font-family: 'Italiana', serif; font-size: 2rem; letter-spacing: 10px; font-weight: 900; cursor: pointer; }
-        .nav-links { display: flex; gap: 25px; align-items: center; }
-        .nav-links a { text-decoration: none; color: var(--text); font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; opacity: 0.5; transition: 0.3s; cursor: pointer; }
+        nav { position: fixed; top: 0; width: 100%; padding: 25px 5%; display: flex; justify-content: space-between; align-items: center; z-index: 2000; background: rgba(5,5,5,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .logo { font-family: 'Italiana', serif; font-size: 2.2rem; letter-spacing: 12px; font-weight: 900; cursor: pointer; }
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-links a { text-decoration: none; color: var(--text); font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; opacity: 0.4; transition: 0.4s; cursor: pointer; }
         .nav-links a:hover, .nav-links a.active { opacity: 1; color: var(--accent); }
-        .cart-icon { padding: 5px 15px; border: 1px solid rgba(255,255,255,0.2); font-size: 0.6rem; letter-spacing: 2px; transition: 0.3s; cursor: pointer; }
+        .cart-icon { padding: 8px 20px; border: 1px solid rgba(255,255,255,0.2); font-size: 0.65rem; letter-spacing: 2px; transition: 0.3s; cursor: pointer; background: transparent; color: white; }
+        .cart-icon:hover { background: white; color: black; }
 
         /* PAGES */
-        .page { display: none; padding-top: 100px; min-height: 100vh; animation: pageFade 0.6s ease-out forwards; }
+        .page { display: none; padding-top: 120px; min-height: 100vh; animation: pageFade 0.8s cubic-bezier(0.19, 1, 0.22, 1) forwards; }
         .page.active { display: block; }
-        @keyframes pageFade { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pageFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* HOME HERO */
-        .home-hero { height: 90vh; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .hero-img-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070') center/cover; filter: brightness(0.4); z-index: -1; }
-        .hero-title-box { text-align: center; z-index: 10; }
-        .hero-title-box h1 { font-family: 'Italiana', serif; font-size: 10vw; text-transform: uppercase; line-height: 0.8; margin-bottom: 20px; }
+        /* HOME HERO - IMPROVED */
+        .home-hero { height: 85vh; display: grid; grid-template-columns: 1.2fr 0.8fr; align-items: center; padding: 0 8%; gap: 50px; }
+        .hero-text h1 { font-family: 'Italiana', serif; font-size: 8vw; text-transform: uppercase; line-height: 0.85; margin-bottom: 30px; }
+        .hero-img-box { width: 100%; height: 70vh; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+        .hero-img-box img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) brightness(0.7); }
 
-        /* SHOP GRID */
-        .shop-container { padding: 80px 8%; }
-        .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
-        .item-card { position: relative; margin-bottom: 40px; }
-        .img-box { width: 100%; height: 500px; overflow: hidden; background: #111; cursor: zoom-in; position: relative; }
-        .item-card img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s; opacity: 0.8; }
-        .item-card:hover img { transform: scale(1.05); opacity: 1; }
-        .quick-view-label { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); font-size: 0.5rem; letter-spacing: 3px; opacity: 0; transition: 0.3s; background: rgba(0,0,0,0.8); padding: 10px 20px; pointer-events: none; }
-        .item-card:hover .quick-view-label { opacity: 1; }
-        .item-info { margin-top: 15px; display: flex; justify-content: space-between; font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; }
-        .add-btn { margin-top: 10px; width: 100%; padding: 12px; background: none; border: 1px solid rgba(255,255,255,0.1); color: white; font-size: 0.6rem; letter-spacing: 2px; cursor: pointer; transition: 0.3s; }
-        .add-btn:hover { background: white; color: black; }
+        /* SHOP CONTAINER */
+        .shop-container { padding: 60px 8%; }
+        .category-title { font-family: 'Italiana', serif; font-size: 3.5rem; margin-bottom: 60px; text-align: center; letter-spacing: 5px; text-transform: uppercase; }
+        .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 50px; }
+        .item-card { position: relative; cursor: pointer; }
+        .img-wrap { width: 100%; height: 550px; overflow: hidden; background: #111; position: relative; border: 1px solid rgba(255,255,255,0.05); }
+        .item-card img { width: 100%; height: 100%; object-fit: cover; transition: 1.5s cubic-bezier(0.19, 1, 0.22, 1); opacity: 0.8; }
+        .item-card:hover img { transform: scale(1.08); opacity: 1; }
+        .quick-view-hint { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 0.6rem; letter-spacing: 4px; opacity: 0; transition: 0.3s; background: white; color: black; padding: 15px 25px; }
+        .item-card:hover .quick-view-hint { opacity: 1; }
+        .item-meta { margin-top: 20px; display: flex; justify-content: space-between; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); }
 
         /* QUICK VIEW MODAL */
-        .quickview-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 4000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(15px); }
-        .qv-content { display: grid; grid-template-columns: 1.2fr 1fr; width: 85%; max-width: 1100px; background: #080808; border: 1px solid rgba(255,255,255,0.1); position: relative; max-height: 90vh; overflow-y: auto; }
-        .qv-img-side img { width: 100%; height: 100%; object-fit: cover; }
-        .qv-details-side { padding: 60px; display: flex; flex-direction: column; justify-content: center; }
-        .qv-details-side h2 { font-family: 'Italiana', serif; font-size: 3rem; margin-bottom: 10px; }
-        .qv-price { color: var(--accent); font-size: 1.2rem; margin-bottom: 25px; letter-spacing: 2px; }
-        .qv-specs { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; margin-bottom: 30px; }
-        .qv-specs span { display: block; font-size: 0.65rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
-        .size-box { display: flex; gap: 10px; margin-bottom: 30px; }
-        .size-item { border: 1px solid rgba(255,255,255,0.2); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; transition: 0.3s; cursor: pointer; }
-        .size-item:hover, .size-item.active { border-color: white; background: white; color: black; }
-        .close-qv { position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 1.5rem; opacity: 0.5; z-index: 10; }
+        .qv-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 4000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(20px); }
+        .qv-box { display: grid; grid-template-columns: 1fr 1fr; width: 90%; max-width: 1200px; background: #080808; border: 1px solid rgba(255,255,255,0.1); position: relative; }
+        .qv-img-side img { width: 100%; height: 80vh; object-fit: cover; }
+        .qv-text-side { padding: 80px; display: flex; flex-direction: column; justify-content: center; }
+        .qv-text-side h2 { font-family: 'Italiana', serif; font-size: 3.5rem; margin-bottom: 15px; }
+        .qv-price { color: var(--accent); font-size: 1.5rem; margin-bottom: 30px; }
+        .size-sel { display: flex; gap: 15px; margin-bottom: 40px; }
+        .size-btn { border: 1px solid rgba(255,255,255,0.2); width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; transition: 0.3s; cursor: pointer; }
+        .size-btn.active { background: white; color: black; border-color: white; }
+        .close-btn { position: absolute; top: 30px; right: 30px; font-size: 1.5rem; cursor: pointer; opacity: 0.5; }
 
         /* FOOTER */
-        footer { padding: 100px 8% 50px; background: #000; border-top: 1px solid rgba(255,255,255,0.05); display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; }
-        .footer-col h4 { font-size: 0.7rem; letter-spacing: 3px; margin-bottom: 25px; color: var(--accent); text-transform: uppercase; }
-        .footer-col a { color: rgba(255,255,255,0.4); text-decoration: none; font-size: 0.75rem; display: block; margin-bottom: 10px; }
+        footer { padding: 100px 8% 60px; background: #000; border-top: 1px solid rgba(255,255,255,0.05); display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; }
+        .f-col h4 { font-size: 0.7rem; letter-spacing: 4px; margin-bottom: 30px; color: var(--accent); text-transform: uppercase; }
+        .f-col a { color: rgba(255,255,255,0.4); text-decoration: none; font-size: 0.8rem; display: block; margin-bottom: 15px; transition: 0.3s; }
+        .f-col a:hover { color: white; padding-left: 5px; }
     </style>
 </head>
 <body>
@@ -71,24 +70,22 @@
     <div class="ambient-glow"></div>
     <div class="bg-watermark" id="watermark">CHIC</div>
 
-    <div class="quickview-overlay" id="qvModal">
-        <div class="qv-content">
-            <span class="close-qv" onclick="closeQV()">✕</span>
+    <div class="qv-overlay" id="qvModal">
+        <div class="qv-box">
+            <span class="close-btn" onclick="closeQV()">✕</span>
             <div class="qv-img-side"><img id="qvImg" src=""></div>
-            <div class="qv-details-side">
-                <h2 id="qvTitle">Product Name</h2>
+            <div class="qv-text-side">
+                <h2 id="qvTitle">Item Name</h2>
                 <p class="qv-price" id="qvPrice">$0.00</p>
-                <div class="qv-specs">
-                    <span id="qvMaterial">Fabric: 100% Virgin Wool</span>
-                    <span id="qvOrigin">Origin: Made in France</span>
+                <p id="qvDesc" style="font-size: 0.85rem; line-height: 2; color: rgba(255,255,255,0.5); margin-bottom: 30px;">
+                    Hand-tailored in our European atelier using sustainably sourced materials.
+                </p>
+                <div class="size-sel">
+                    <div class="size-btn" onclick="selSize(this)">S</div>
+                    <div class="size-btn active" onclick="selSize(this)">M</div>
+                    <div class="size-btn" onclick="selSize(this)">L</div>
                 </div>
-                <div class="size-box">
-                    <div class="size-item" onclick="selectSize(this)">S</div>
-                    <div class="size-item active" onclick="selectSize(this)">M</div>
-                    <div class="size-item" onclick="selectSize(this)">L</div>
-                    <div class="size-item" onclick="selectSize(this)">XL</div>
-                </div>
-                <button class="add-btn" style="background: white; color: black; font-weight: 700; height: 50px;" onclick="addToCart(event)">ADD TO CART</button>
+                <button class="cart-icon" style="width: 100%; height: 60px; font-weight: 700;" onclick="buyItem()">ADD TO BAG</button>
             </div>
         </div>
     </div>
@@ -100,88 +97,144 @@
             <a onclick="showPage('shop-men')" class="nav-item">Men</a>
             <a onclick="showPage('shop-women')" class="nav-item">Women</a>
             <a onclick="showPage('shop-bags')" class="nav-item">Bags</a>
-            <div class="cart-icon" id="cartDisplay">CART (0)</div>
+            <div class="cart-icon" id="cartCount">BAG (0)</div>
         </div>
     </nav>
 
     <section id="home" class="page">
         <div class="home-hero">
-            <div class="hero-img-bg"></div>
-            <div class="hero-title-box">
-                <p style="letter-spacing: 10px; opacity: 0.5;">COLLECTION 2026</p>
-                <h1>Architectural<br>Silence</h1>
-                <button onclick="showPage('shop-new')" style="margin-top: 30px; background: white; color: black; border: none; padding: 15px 50px; text-transform: uppercase; letter-spacing: 5px; font-size: 0.7rem; cursor: pointer;">Enter Boutique</button>
+            <div class="hero-text">
+                <p style="letter-spacing: 12px; opacity: 0.4; margin-bottom: 20px;">ESTABLISHED 2026</p>
+                <h1>Defined<br>By<br><span style="color: var(--accent);">Modernity</span></h1>
+                <button onclick="showPage('shop-new')" style="margin-top: 40px; background: white; border: none; padding: 20px 60px; letter-spacing: 5px; font-size: 0.7rem; text-transform: uppercase; cursor: pointer;">Shop Collection</button>
+            </div>
+            <div class="hero-img-box">
+                <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070">
             </div>
         </div>
     </section>
 
     <section id="shop-new" class="page active">
         <div class="shop-container">
-            <h2 style="font-family: 'Italiana'; font-size: 3rem; margin-bottom: 50px; letter-spacing: 5px;">NEW ARRIVALS</h2>
+            <h2 class="category-title">New Arrivals</h2>
             <div class="product-grid">
-                <div class="item-card" onclick="openQV('Onyx Blazer', '$1,450', 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1920', '80% Wool, 20% Cashmere', 'Paris, France')">
-                    <div class="img-box"><img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1920"><span class="quick-view-label">QUICK VIEW</span></div>
-                    <div class="item-info"><span>Onyx Blazer</span><span>$1,450</span></div>
-                    <button class="add-btn" onclick="addToCart(event)">Add to Cart</button>
+                <div class="item-card" onclick="openQV('Onyx Blazer', '$1,450', 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1920')">
+                    <div class="img-wrap"><img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1920"><div class="quick-view-hint">QUICK VIEW</div></div>
+                    <div class="item-meta"><span>Onyx Blazer</span><span>$1,450</span></div>
                 </div>
-                <div class="item-card" onclick="openQV('Silk Column', '$980', 'https://images.unsplash.com/photo-1539109132314-347f85417bd0?q=80&w=1974', '100% Mulberry Silk', 'Como, Italy')">
-                    <div class="img-box"><img src="https://images.unsplash.com/photo-1539109132314-347f85417bd0?q=80&w=1974"><span class="quick-view-label">QUICK VIEW</span></div>
-                    <div class="item-info"><span>Silk Column</span><span>$980</span></div>
-                    <button class="add-btn" onclick="addToCart(event)">Add to Cart</button>
+                <div class="item-card" onclick="openQV('Silk Column', '$980', 'https://images.unsplash.com/photo-1539109132314-347f85417bd0?q=80&w=1974')">
+                    <div class="img-wrap"><img src="https://images.unsplash.com/photo-1539109132314-347f85417bd0?q=80&w=1974"><div class="quick-view-hint">QUICK VIEW</div></div>
+                    <div class="item-meta"><span>Silk Column</span><span>$980</span></div>
                 </div>
-                <div class="item-card" onclick="openQV('Void Trousers', '$540', 'https://images.unsplash.com/photo-1514316454349-750a7fd3da3a?q=80&w=1974', 'High-Density Crepe', 'Tokyo, Japan')">
-                    <div class="img-box"><img src="https://images.unsplash.com/photo-1514316454349-750a7fd3da3a?q=80&w=1974"><span class="quick-view-label">QUICK VIEW</span></div>
-                    <div class="item-info"><span>Void Trousers</span><span>$540</span></div>
-                    <button class="add-btn" onclick="addToCart(event)">Add to Cart</button>
+                <div class="item-card" onclick="openQV('Void Trouser', '$620', 'https://images.unsplash.com/photo-1514316454349-750a7fd3da3a?q=80&w=1974')">
+                    <div class="img-wrap"><img src="https://images.unsplash.com/photo-1514316454349-750a7fd3da3a?q=80&w=1974"><div class="quick-view-hint">QUICK VIEW</div></div>
+                    <div class="item-meta"><span>Void Trouser</span><span>$620</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="shop-men" class="page">
+        <div class="shop-container">
+            <h2 class="category-title">Men</h2>
+            <div class="product-grid">
+                <div class="item-card" onclick="openQV('Monolith Coat', '$2,100', 'https://images.unsplash.com/photo-1488161628813-04466f872be2?q=80&w=1964')">
+                    <div class="img-wrap"><img src="https://images.unsplash.com/photo-1488161628813-04466f872be2?q=80&w=1964"><div class="quick-view-hint">QUICK VIEW</div></div>
+                    <div class="item-meta"><span>Monolith Coat</span><span>$2,100</span></div>
+                </div>
+                <div class="item-card" onclick="openQV('Raw Shirt', '$480', 'https://images.unsplash.com/photo-1504131598085-4cca8500b677?q=80&w=1969')">
+                    <div class="img-wrap"><img src="https://images.unsplash.com/photo-1504131598085-4cca8500b677?q=80&w=1969"><div class="quick-view-hint">QUICK VIEW</div></div>
+                    <div class="item-meta"><span>Raw Shirt</span><span>$480</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="shop-women" class="page">
+        <div class="shop-container">
+            <h2 class="category-title">Women</h2>
+            <div class="product-grid">
+                <div class="item-card" onclick="openQV('Ethereal Gown', '$3,400', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964')">
+                    <div class="img-wrap"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964"><div class="quick-view-hint">QUICK VIEW</div></div>
+                    <div class="item-meta"><span>Ethereal Gown</span><span>$3,400</span></div>
+                </div>
+                <div class="item-card" onclick="openQV('Structured Top', '$850', 'https://images.unsplash.com/photo-1496940850453-bb2597412fca?q=80&w=1974')">
+                    <div class="img-wrap"><img src="https://images.unsplash.com/photo-1496940850453-bb2597412fca?q=80&w=1974"><div class="quick-view-hint">QUICK VIEW</div></div>
+                    <div class="item-meta"><span>Structured Top</span><span>$850</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="shop-bags" class="page">
+        <div class="shop-container">
+            <h2 class="category-title">Bags</h2>
+            <div class="product-grid">
+                <div class="item-card" onclick="openQV('Architect Tote', '$1,800', 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=2069')">
+                    <div class="img-wrap"><img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=2069"><div class="quick-view-hint">QUICK VIEW</div></div>
+                    <div class="item-meta"><span>Architect Tote</span><span>$1,800</span></div>
+                </div>
+                <div class="item-card" onclick="openQV('Onyx Clutch', '$950', 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=1974')">
+                    <div class="img-wrap"><img src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=1974"><div class="quick-view-hint">QUICK VIEW</div></div>
+                    <div class="item-meta"><span>Onyx Clutch</span><span>$950</span></div>
                 </div>
             </div>
         </div>
     </section>
 
     <footer>
-        <div class="footer-col"><div class="logo" style="font-size: 1.2rem; margin-bottom: 20px;">CHIC</div><p>Minimalist luxury for the global avant-garde.</p></div>
-        <div class="footer-col"><h4>Shop</h4><a href="#">Men</a><a href="#">Women</a><a href="#">Bags</a></div>
-        <div class="footer-col"><h4>Service</h4><a href="#">Shipping</a><a href="#">Returns</a><a href="#">Sizing</a></div>
-        <div class="footer-col"><h4>Social</h4><a href="#">Instagram</a><a href="#">Twitter</a><a href="#">TikTok</a></div>
+        <div class="f-col">
+            <div class="logo" style="font-size: 1.4rem; margin-bottom: 25px;">CHIC</div>
+            <p style="font-size: 0.8rem; line-height: 2; opacity: 0.4;">Defining the intersection of architecture and avant-garde fashion since 2026. Made for the global citizen.</p>
+        </div>
+        <div class="f-col"><h4>Collection</h4><a href="#" onclick="showPage('shop-men')">Men</a><a href="#" onclick="showPage('shop-women')">Women</a><a href="#" onclick="showPage('shop-bags')">Bags</a></div>
+        <div class="f-col"><h4>Support</h4><a href="#">Shipping</a><a href="#">Returns</a><a href="#">Contact</a></div>
+        <div class="f-col"><h4>Social</h4><a href="#">Instagram</a><a href="#">Twitter</a><a href="#">LinkedIn</a></div>
     </footer>
 
     <script>
-        // PAGE & WATERMARK LOGIC
+        // PAGE SWITCHER
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
+            
+            // Highlight active nav link
+            document.querySelectorAll('.nav-item').forEach(link => {
+                link.classList.remove('active');
+                if(link.innerText.toLowerCase().includes(id.replace('shop-', ''))) link.classList.add('active');
+            });
             window.scrollTo(0, 0);
         }
 
+        // QUICK VIEW
+        function openQV(name, price, img) {
+            document.getElementById('qvTitle').innerText = name;
+            document.getElementById('qvPrice').innerText = price;
+            document.getElementById('qvImg').src = img;
+            document.getElementById('qvModal').style.display = 'flex';
+        }
+        function closeQV() { document.getElementById('qvModal').style.display = 'none'; }
+
+        // SIZE SELECTOR
+        function selSize(btn) {
+            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        // CART COUNTER
+        let items = 0;
+        function buyItem() {
+            items++;
+            document.getElementById('cartCount').innerText = `BAG (${items})`;
+            closeQV();
+        }
+
+        // WATERMARK SCROLL
         window.addEventListener('scroll', () => {
             const s = window.pageYOffset;
             document.getElementById('watermark').style.letterSpacing = (s * 0.03 - 2) + 'vw';
+            document.getElementById('watermark').style.opacity = 0.01 + (s * 0.0001);
         });
-
-        // CART LOGIC
-        let count = 0;
-        function addToCart(e) {
-            if(e) e.stopPropagation(); 
-            count++;
-            document.getElementById('cartDisplay').innerText = `CART (${count})`;
-        }
-
-        // QUICK VIEW LOGIC
-        function openQV(title, price, img, material, origin) {
-            document.getElementById('qvTitle').innerText = title;
-            document.getElementById('qvPrice').innerText = price;
-            document.getElementById('qvImg').src = img;
-            document.getElementById('qvMaterial').innerText = `Material: ${material}`;
-            document.getElementById('qvOrigin').innerText = `Origin: ${origin}`;
-            document.getElementById('qvModal').style.display = 'flex';
-        }
-
-        function closeQV() { document.getElementById('qvModal').style.display = 'none'; }
-        
-        function selectSize(el) {
-            document.querySelectorAll('.size-item').forEach(i => i.classList.remove('active'));
-            el.classList.add('active');
-        }
     </script>
 </body>
 </html>
