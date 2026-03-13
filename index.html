@@ -1,240 +1,1035 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHIC | Premium Fashion Boutique</title>
-    <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Montserrat:wght@100;300;700&display=swap" rel="stylesheet">
-    <style>
-        :root { --bg: #050505; --text: #ffffff; --accent: #d4af37; }
-        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; cursor: crosshair; }
-        body { background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHIC — Avant-Garde Fashion</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Neue+Haas+Unica:wght@100;300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0a0a08;
+  --parchment: #f5f0e8;
+  --cream: #faf8f3;
+  --gold: #b8965a;
+  --muted: rgba(10,10,8,0.35);
+  --border: rgba(10,10,8,0.08);
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Neue Haas Unica', 'Helvetica Neue', sans-serif;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--cream);color:var(--ink);font-family:var(--font-body);font-weight:300;cursor:none;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+@media(pointer:coarse){body{cursor:auto}}
 
-        /* Background Effects */
-        .ambient-glow { position: fixed; top: 50%; left: 50%; width: 80vw; height: 80vw; background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%); transform: translate(-50%, -50%); pointer-events: none; z-index: 0; filter: blur(120px); }
-        .bg-watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: 'Italiana', serif; font-size: 35vw; color: rgba(255,255,255,0.01); z-index: -1; white-space: nowrap; pointer-events: none; letter-spacing: -2vw; transition: 0.3s; }
+/* CURSOR */
+#cursor{position:fixed;top:0;left:0;z-index:9999;pointer-events:none;mix-blend-mode:difference}
+.c-dot{width:8px;height:8px;background:var(--ink);border-radius:50%;position:absolute;transform:translate(-50%,-50%);transition:width .25s,height .25s}
+.c-ring{width:36px;height:36px;border:1px solid var(--ink);border-radius:50%;position:absolute;transform:translate(-50%,-50%);transition:width .45s cubic-bezier(.23,1,.32,1),height .45s cubic-bezier(.23,1,.32,1),opacity .3s;opacity:.5}
+body.hovering .c-ring{width:60px;height:60px;opacity:.18}
+body.hovering .c-dot{width:4px;height:4px}
+body.zooming .c-ring{width:88px;height:88px;opacity:.1;border-style:dashed}
 
-        /* NAVIGATION */
-        nav { position: fixed; top: 0; width: 100%; padding: 25px 5%; display: flex; justify-content: space-between; align-items: center; z-index: 2000; background: rgba(5,5,5,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .logo { font-family: 'Italiana', serif; font-size: 2.2rem; letter-spacing: 12px; font-weight: 900; cursor: pointer; }
-        .nav-links { display: flex; gap: 30px; align-items: center; }
-        .nav-links a { text-decoration: none; color: var(--text); font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; opacity: 0.4; transition: 0.4s; cursor: pointer; }
-        .nav-links a:hover, .nav-links a.active { opacity: 1; color: var(--accent); }
-        .cart-icon { padding: 8px 20px; border: 1px solid rgba(255,255,255,0.2); font-size: 0.65rem; letter-spacing: 2px; transition: 0.3s; cursor: pointer; background: transparent; color: white; }
-        .cart-icon:hover { background: white; color: black; }
+/* NOISE */
+body::before{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:200px}
 
-        /* PAGES */
-        .page { display: none; padding-top: 120px; min-height: 100vh; animation: pageFade 0.8s cubic-bezier(0.19, 1, 0.22, 1) forwards; }
-        .page.active { display: block; }
-        @keyframes pageFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+/* CURTAIN */
+#curtain{position:fixed;inset:0;z-index:8000;background:var(--ink);transform:scaleY(0);transform-origin:bottom;pointer-events:none;display:flex;align-items:center;justify-content:center}
+#curtain .cl{font-family:var(--font-display);font-size:clamp(2rem,6vw,5rem);color:var(--parchment);letter-spacing:.4em;opacity:0;transition:opacity .2s}
+#curtain.in{animation:cIn .55s cubic-bezier(.87,0,.13,1) forwards}
+#curtain.in .cl{opacity:1}
+#curtain.out{animation:cOut .55s cubic-bezier(.87,0,.13,1) forwards;transform-origin:top}
+@keyframes cIn{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes cOut{from{transform:scaleY(1)}to{transform:scaleY(0)}}
 
-        /* HOME HERO - IMPROVED */
-        .home-hero { height: 85vh; display: grid; grid-template-columns: 1.2fr 0.8fr; align-items: center; padding: 0 8%; gap: 50px; }
-        .hero-text h1 { font-family: 'Italiana', serif; font-size: 8vw; text-transform: uppercase; line-height: 0.85; margin-bottom: 30px; }
-        .hero-img-box { width: 100%; height: 70vh; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
-        .hero-img-box img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) brightness(0.7); }
+/* LOADER */
+#loader{position:fixed;inset:0;background:var(--ink);z-index:9000;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:40px;transition:opacity .8s,visibility .8s}
+#loader.out{opacity:0;visibility:hidden}
+.lw{font-family:var(--font-display);font-size:clamp(3rem,10vw,9rem);color:var(--parchment);letter-spacing:.4em;font-weight:300;overflow:hidden}
+.lw span{display:inline-block;transform:translateY(110%);animation:liftIn 1s cubic-bezier(.16,1,.3,1) .3s forwards}
+.lb{width:120px;height:1px;background:rgba(245,240,232,.2);position:relative;overflow:hidden}
+.lb::after{content:'';position:absolute;inset-y:0;left:-100%;width:100%;background:var(--gold);animation:barFill 1.2s cubic-bezier(.16,1,.3,1) .5s forwards}
+@keyframes liftIn{to{transform:translateY(0)}}
+@keyframes barFill{to{left:0}}
 
-        /* SHOP CONTAINER */
-        .shop-container { padding: 60px 8%; }
-        .category-title { font-family: 'Italiana', serif; font-size: 3.5rem; margin-bottom: 60px; text-align: center; letter-spacing: 5px; text-transform: uppercase; }
-        .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 50px; }
-        .item-card { position: relative; cursor: pointer; }
-        .img-wrap { width: 100%; height: 550px; overflow: hidden; background: #111; position: relative; border: 1px solid rgba(255,255,255,0.05); }
-        .item-card img { width: 100%; height: 100%; object-fit: cover; transition: 1.5s cubic-bezier(0.19, 1, 0.22, 1); opacity: 0.8; }
-        .item-card:hover img { transform: scale(1.08); opacity: 1; }
-        .quick-view-hint { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 0.6rem; letter-spacing: 4px; opacity: 0; transition: 0.3s; background: white; color: black; padding: 15px 25px; }
-        .item-card:hover .quick-view-hint { opacity: 1; }
-        .item-meta { margin-top: 20px; display: flex; justify-content: space-between; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+/* MARQUEE */
+.mq-strip{position:fixed;top:0;left:0;right:0;height:32px;background:var(--gold);display:flex;align-items:center;overflow:hidden;z-index:1000}
+.mq-track{display:flex;animation:mqScroll 30s linear infinite;white-space:nowrap}
+.mq-track span{font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--cream);padding:0 40px;opacity:.85}
+.mq-track span.sep{opacity:.4;padding:0}
+@keyframes mqScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-        /* QUICK VIEW MODAL */
-        .qv-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 4000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(20px); }
-        .qv-box { display: grid; grid-template-columns: 1fr 1fr; width: 90%; max-width: 1200px; background: #080808; border: 1px solid rgba(255,255,255,0.1); position: relative; }
-        .qv-img-side img { width: 100%; height: 80vh; object-fit: cover; }
-        .qv-text-side { padding: 80px; display: flex; flex-direction: column; justify-content: center; }
-        .qv-text-side h2 { font-family: 'Italiana', serif; font-size: 3.5rem; margin-bottom: 15px; }
-        .qv-price { color: var(--accent); font-size: 1.5rem; margin-bottom: 30px; }
-        .size-sel { display: flex; gap: 15px; margin-bottom: 40px; }
-        .size-btn { border: 1px solid rgba(255,255,255,0.2); width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; transition: 0.3s; cursor: pointer; }
-        .size-btn.active { background: white; color: black; border-color: white; }
-        .close-btn { position: absolute; top: 30px; right: 30px; font-size: 1.5rem; cursor: pointer; opacity: 0.5; }
+/* NAV */
+nav{position:fixed;top:32px;left:0;right:0;z-index:500;padding:0 5%;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(250,248,243,.92);backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid var(--border);transition:background .4s}
+nav.scrolled{background:rgba(250,248,243,.98)}
+.logo{font-family:var(--font-display);font-size:1.75rem;font-weight:400;letter-spacing:.35em;cursor:pointer;color:var(--ink);text-transform:uppercase;transition:color .3s}
+.logo:hover{color:var(--gold)}
+.nav-center{display:flex;gap:36px;position:absolute;left:50%;transform:translateX(-50%)}
+.nav-link{font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:color .3s;padding:4px 0;position:relative;border:none;background:none;font-family:var(--font-body)}
+.nav-link::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;background:var(--gold);transition:width .4s cubic-bezier(.23,1,.32,1)}
+.nav-link:hover,.nav-link.active{color:var(--ink)}
+.nav-link:hover::after,.nav-link.active::after{width:100%}
+.nav-right{display:flex;align-items:center;gap:14px}
 
-        /* FOOTER */
-        footer { padding: 100px 8% 60px; background: #000; border-top: 1px solid rgba(255,255,255,0.05); display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; }
-        .f-col h4 { font-size: 0.7rem; letter-spacing: 4px; margin-bottom: 30px; color: var(--accent); text-transform: uppercase; }
-        .f-col a { color: rgba(255,255,255,0.4); text-decoration: none; font-size: 0.8rem; display: block; margin-bottom: 15px; transition: 0.3s; }
-        .f-col a:hover { color: white; padding-left: 5px; }
-    </style>
+/* Currency */
+.cur-sw{display:flex;border:1px solid var(--border);overflow:hidden}
+.cur-btn{font-size:.5rem;letter-spacing:.15em;padding:7px 10px;background:transparent;border:none;cursor:pointer;color:var(--muted);font-family:var(--font-body);transition:background .25s,color .25s}
+.cur-btn.on{background:var(--ink);color:var(--cream)}
+
+.nav-bag{font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;cursor:pointer;color:var(--ink);padding:10px 20px;border:1px solid var(--ink);transition:background .3s,color .3s;background:transparent;font-family:var(--font-body)}
+.nav-bag:hover{background:var(--ink);color:var(--cream)}
+.bc{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;background:var(--gold);color:white;border-radius:50%;font-size:.45rem;margin-left:6px;opacity:0;transform:scale(0);transition:opacity .3s,transform .3s;vertical-align:middle}
+.bc.vis{opacity:1;transform:scale(1)}
+
+.nav-wish{background:none;border:none;cursor:pointer;font-size:1rem;color:var(--muted);transition:color .3s;line-height:1;padding:4px}
+.nav-wish:hover{color:#c0504d}
+.wbadge{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;background:#c0504d;color:white;border-radius:50%;font-size:.4rem;margin-left:3px;opacity:0;transform:scale(0);transition:opacity .3s,transform .3s;vertical-align:middle}
+.wbadge.vis{opacity:1;transform:scale(1)}
+
+/* Hamburger */
+.hbg{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+.hbg span{display:block;width:24px;height:1px;background:var(--ink);transition:transform .4s,opacity .4s}
+.hbg.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.hbg.open span:nth-child(2){opacity:0}
+.hbg.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+
+/* Mobile menu */
+.mob-menu{position:fixed;inset:0;z-index:490;background:var(--cream);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;transform:translateX(100%);transition:transform .65s cubic-bezier(.16,1,.3,1)}
+.mob-menu.open{transform:translateX(0)}
+.mm-link{font-family:var(--font-display);font-size:clamp(2.5rem,8vw,5rem);font-weight:300;color:var(--ink);letter-spacing:.05em;cursor:pointer;padding:8px 0;position:relative;overflow:hidden;transition:color .3s}
+.mm-link::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;background:var(--gold);transition:width .5s}
+.mm-link:hover{color:var(--gold)}
+.mm-link:hover::after{width:100%}
+.mm-cur{font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);margin-top:32px;display:flex;gap:24px}
+.mm-cur span{cursor:pointer;transition:color .3s;padding:4px}
+.mm-cur span:hover{color:var(--ink)}
+
+/* PAGES */
+.page{display:none;padding-top:104px;min-height:100vh}
+.page.active{display:block;animation:pReveal .7s cubic-bezier(.16,1,.3,1) forwards}
+@keyframes pReveal{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── HOME PAGE ── */
+#home { padding-top: 104px; }
+
+/* HERO — full-bleed dark cinematic */
+.hero {
+  position: relative;
+  height: calc(100vh - 104px);
+  min-height: 600px;
+  overflow: hidden;
+  background: #080806;
+  display: flex; align-items: flex-end;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background-image: url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070');
+  background-size: cover; background-position: center 20%;
+  filter: saturate(0.55) brightness(0.45);
+  transform: scale(1.05);
+  transition: transform 12s ease;
+}
+.hero:hover .hero-bg { transform: scale(1); }
+
+/* gradient vignette */
+.hero-vignette {
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(8,8,6,0) 0%,
+    rgba(8,8,6,0) 30%,
+    rgba(8,8,6,0.65) 70%,
+    rgba(8,8,6,0.97) 100%
+  );
+}
+/* side vignette */
+.hero-vignette::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to right, rgba(8,8,6,0.5) 0%, transparent 40%, transparent 60%, rgba(8,8,6,0.3) 100%);
+}
+
+/* big kinetic type watermark */
+.hero-wm {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-display);
+  font-size: clamp(12rem, 28vw, 26rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,255,255,0.06);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  animation: wmDrift 18s ease-in-out infinite alternate;
+}
+@keyframes wmDrift {
+  from { transform: translate(-50%, -50%) translateX(-2%); }
+  to   { transform: translate(-50%, -50%) translateX(2%); }
+}
+
+/* content layer */
+.hero-content {
+  position: relative; z-index: 2;
+  width: 100%; padding: 0 6% 7%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: flex-end;
+  gap: 60px;
+}
+.hero-left { flex: 1; }
+
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-size: .55rem; letter-spacing: .3em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 28px;
+  opacity: 0; animation: fadeUp .9s 1.5s forwards;
+}
+.hero-tag::before {
+  content: ''; display: block;
+  width: 32px; height: 1px; background: var(--gold);
+}
+
+.hero-h1 {
+  font-family: var(--font-display);
+  font-size: clamp(4.5rem, 9vw, 10rem);
+  line-height: .86; font-weight: 300;
+  color: #f5f0e8;
+  margin-bottom: 40px;
+  opacity: 0; animation: fadeUp 1s 1.6s forwards;
+}
+.hero-h1 em {
+  font-style: italic;
+  background: linear-gradient(135deg, var(--gold) 0%, #e8c98a 50%, var(--gold) 100%);
+  background-size: 200%;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  animation: shimmer 4s linear 2.6s infinite;
+}
+@keyframes shimmer { 0%{background-position:0%} 100%{background-position:200%} }
+
+.hero-sub {
+  font-size: .82rem; line-height: 2;
+  color: rgba(245,240,232,.45);
+  max-width: 360px; margin-bottom: 52px;
+  opacity: 0; animation: fadeUp 1s 1.75s forwards;
+}
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 20px;
+  font-size: .6rem; letter-spacing: .25em; text-transform: uppercase;
+  padding: 18px 44px;
+  background: var(--gold); color: var(--ink);
+  border: none; cursor: pointer;
+  position: relative; overflow: hidden; transition: color .5s;
+  opacity: 0; animation: fadeUp 1s 1.9s forwards;
+  font-family: var(--font-body);
+}
+.btn-primary::before {
+  content: ''; position: absolute; inset: 0;
+  background: #f5f0e8;
+  transform: translateX(-101%);
+  transition: transform .6s cubic-bezier(.16,1,.3,1);
+}
+.btn-primary:hover::before { transform: translateX(0); }
+.btn-primary span, .btn-primary .arr { position: relative; }
+.btn-primary .arr { transition: transform .4s; }
+.btn-primary:hover .arr { transform: translateX(6px); }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+
+/* hero right stat block */
+.hero-right {
+  display: flex; flex-direction: column; gap: 32px; align-items: flex-end;
+  opacity: 0; animation: fadeUp 1s 2.1s forwards;
+}
+.hero-stat {
+  text-align: right;
+  border-right: 1px solid rgba(245,240,232,.15);
+  padding-right: 24px;
+}
+.hero-stat strong {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 4vw, 3.5rem);
+  font-weight: 300; color: var(--gold);
+  display: block; line-height: 1;
+}
+.hero-stat span {
+  font-size: .55rem; letter-spacing: .25em; text-transform: uppercase;
+  color: rgba(245,240,232,.4); margin-top: 6px; display: block;
+}
+
+/* scroll cue */
+.hero-scr {
+  position: absolute; bottom: 48px; right: 6%; z-index: 3;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  font-size: .5rem; letter-spacing: .3em; text-transform: uppercase;
+  color: rgba(245,240,232,.35); cursor: pointer;
+  opacity: 0; animation: fadeUp 1s 2.3s forwards;
+  writing-mode: vertical-rl;
+}
+.hero-scr-line { width: 1px; height: 56px; background: rgba(245,240,232,.15); position: relative; overflow: hidden; }
+.hero-scr-line::after { content:''; position:absolute; top:-100%; left:0; width:100%; height:100%; background:var(--gold); animation:sLine 2.2s ease 2.5s infinite; }
+@keyframes sLine { 0%{top:-100%} 100%{top:100%} }
+
+/* CATEGORY STRIP */
+.cat-strip {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  border-top: 1px solid var(--border);
+}
+.cat-card {
+  position: relative; overflow: hidden;
+  height: 460px; cursor: pointer;
+  border-right: 1px solid var(--border);
+}
+.cat-card:last-child { border-right: none; }
+.cat-card img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: saturate(.55) brightness(.8);
+  transform: scale(1.06);
+  transition: transform 1.4s cubic-bezier(.16,1,.3,1), filter .8s;
+}
+.cat-card:hover img { transform: scale(1); filter: saturate(.75) brightness(.85); }
+.cat-card-ov {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(8,8,6,.85) 0%, rgba(8,8,6,.1) 60%);
+  display: flex; flex-direction: column;
+  justify-content: flex-end; padding: 36px;
+}
+.cat-label {
+  font-size: .55rem; letter-spacing: .3em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 10px;
+}
+.cat-name {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 300; color: #f5f0e8; line-height: 1;
+  margin-bottom: 20px;
+}
+.cat-arrow {
+  width: 40px; height: 40px; border: 1px solid rgba(245,240,232,.3);
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(245,240,232,.7); font-size: .9rem;
+  transition: background .3s, border-color .3s, transform .4s;
+}
+.cat-card:hover .cat-arrow { background: var(--gold); border-color: var(--gold); color: var(--ink); transform: translateX(6px); }
+
+/* count badge */
+.cat-count {
+  position: absolute; top: 24px; right: 24px;
+  font-size: .5rem; letter-spacing: .2em; text-transform: uppercase;
+  color: rgba(245,240,232,.5);
+  border: 1px solid rgba(245,240,232,.15); padding: 5px 12px;
+  backdrop-filter: blur(4px);
+}
+
+/* BENTO MOSAIC */
+.bento {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 0.8fr;
+  grid-template-rows: 360px 360px;
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+}
+.bento-cell {
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  overflow: hidden; position: relative;
+  cursor: pointer;
+}
+.bento-cell.tall { grid-row: span 2; }
+.bento-cell.wide { grid-column: span 2; }
+.bento-cell img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: saturate(.5); display: block;
+  transition: transform 1.4s cubic-bezier(.16,1,.3,1), filter .8s;
+}
+.bento-cell:hover img { transform: scale(1.06); filter: saturate(.8); }
+.bento-cell-text {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  justify-content: flex-end; padding: 28px 32px;
+  background: linear-gradient(to top, rgba(8,8,6,.7) 0%, transparent 55%);
+  opacity: 0; transition: opacity .4s;
+}
+.bento-cell:hover .bento-cell-text { opacity: 1; }
+.bento-cell-text p { font-size: .55rem; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.bento-cell-text h3 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 300; color: #f5f0e8; line-height: 1.1; }
+
+/* dark quote strip */
+.quote-strip {
+  background: var(--ink); color: var(--parchment);
+  padding: 100px 10%;
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; gap: 32px;
+  border-top: 1px solid rgba(245,240,232,.05);
+}
+.quote-mark { font-family: var(--font-display); font-size: 5rem; color: var(--gold); line-height: 0; margin-bottom: 12px; opacity: .5; }
+.quote-text { font-family: var(--font-display); font-size: clamp(1.8rem,3.5vw,3.2rem); font-weight: 300; font-style: italic; line-height: 1.3; max-width: 800px; }
+.quote-attr { font-size: .6rem; letter-spacing: .3em; text-transform: uppercase; color: rgba(245,240,232,.4); }
+
+/* home responsive */
+@media(max-width:900px){
+  .hero-content { grid-template-columns: 1fr; }
+  .hero-right { display: none; }
+  .hero-h1 { font-size: clamp(3.5rem,13vw,6rem); }
+  .cat-strip { grid-template-columns: 1fr; }
+  .cat-card { height: 340px; border-right: none; border-bottom: 1px solid var(--border); }
+  .bento { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+  .bento-cell.tall { grid-row: span 1; }
+  .bento-cell.wide { grid-column: span 2; }
+  .bento-cell { height: 280px; }
+  .bento-cell-text { opacity: 1; }
+}
+@media(max-width:540px){
+  .bento { grid-template-columns: 1fr; }
+  .bento-cell.wide { grid-column: span 1; }
+}
+
+/* SHOP */
+.shop-header{padding:60px 5% 40px;display:flex;align-items:flex-end;justify-content:space-between;border-bottom:1px solid var(--border)}
+.sh-cat{font-size:.55rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.sh-title{font-family:var(--font-display);font-size:clamp(3.5rem,7vw,7rem);font-weight:300;line-height:1}
+.sh-count{font-size:.7rem;color:var(--muted);letter-spacing:.1em}
+
+/* PRODUCT GRID */
+.product-grid{display:grid;grid-template-columns:repeat(3,1fr);border-left:1px solid var(--border)}
+.product-grid.two-col{grid-template-columns:repeat(2,1fr)}
+.product-grid .fp{grid-column:span 2}
+.prod-card{border-right:1px solid var(--border);border-bottom:1px solid var(--border);cursor:pointer;overflow:hidden;position:relative;background:var(--cream)}
+
+/* IMAGE ZOOM */
+.prod-img{width:100%;aspect-ratio:3/4;overflow:hidden;background:var(--parchment);position:relative}
+.prod-card.fp .prod-img{aspect-ratio:auto;height:680px}
+.prod-img img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.6);transition:transform 1.6s cubic-bezier(.16,1,.3,1),filter .8s;transform-origin:var(--ox,50%) var(--oy,50%)}
+.prod-card:hover .prod-img img{filter:saturate(.85)}
+.prod-img-ov{position:absolute;inset:0;background:rgba(10,10,8,0);transition:background .5s}
+.prod-card:hover .prod-img-ov{background:rgba(10,10,8,.08)}
+.prod-qv{position:absolute;bottom:24px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--cream);font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;padding:12px 28px;opacity:0;transition:opacity .4s,transform .4s;white-space:nowrap;border:1px solid var(--border)}
+.prod-card:hover .prod-qv{opacity:1;transform:translateX(-50%) translateY(0)}
+.prod-tag{position:absolute;top:20px;left:20px;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;background:var(--gold);color:white;padding:5px 10px}
+.card-wish{position:absolute;top:20px;right:20px;background:rgba(250,248,243,.85);border:none;cursor:pointer;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:.9rem;color:var(--muted);transition:color .3s,transform .3s;backdrop-filter:blur(4px)}
+.card-wish:hover,.card-wish.on{color:#c0504d;transform:scale(1.15)}
+.prod-info{padding:24px 28px 32px;display:flex;justify-content:space-between;align-items:flex-end;border-top:1px solid var(--border)}
+.prod-name{font-size:.75rem;letter-spacing:.1em;margin-bottom:4px}
+.prod-material{font-size:.65rem;color:var(--muted)}
+.prod-price{font-family:var(--font-display);font-size:1.4rem;font-weight:300;letter-spacing:.05em}
+
+/* MODAL */
+.modal-ov{position:fixed;inset:0;z-index:2000;background:rgba(10,10,8,0);display:none;align-items:center;justify-content:center;transition:background .4s}
+.modal-ov.open{display:flex;background:rgba(10,10,8,.75);backdrop-filter:blur(8px)}
+.modal-box{width:94vw;max-width:1100px;display:grid;grid-template-columns:1.05fr .95fr;background:var(--cream);max-height:92vh;overflow:hidden;transform:translateY(30px);opacity:0;transition:transform .6s cubic-bezier(.16,1,.3,1),opacity .5s}
+.modal-ov.open .modal-box{transform:translateY(0);opacity:1}
+.m-img-wrap{overflow:hidden;position:relative}
+.m-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.65)}
+.m-body{padding:64px 56px;display:flex;flex-direction:column;overflow-y:auto;border-left:1px solid var(--border)}
+.m-close{align-self:flex-end;background:none;border:none;cursor:pointer;width:36px;height:36px;display:flex;align-items:center;justify-content:center;margin-bottom:48px;color:var(--muted);font-size:1.1rem;transition:color .3s,transform .3s;margin-top:-20px;margin-right:-20px}
+.m-close:hover{color:var(--ink);transform:rotate(90deg)}
+.m-cat{font-size:.55rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.m-title{font-family:var(--font-display);font-size:clamp(2rem,3.5vw,3rem);font-weight:300;line-height:1.1;margin-bottom:6px}
+.m-price{font-family:var(--font-display);font-size:1.8rem;font-weight:300;color:var(--gold);margin-bottom:32px}
+.m-div{width:40px;height:1px;background:var(--border);margin-bottom:28px}
+.m-desc{font-size:.8rem;line-height:2;color:var(--muted);margin-bottom:40px}
+.m-label{font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;margin-bottom:14px}
+.sz-row{display:flex;gap:10px;margin-bottom:36px}
+.sz{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);font-size:.65rem;cursor:pointer;transition:all .25s;font-family:var(--font-body)}
+.sz:hover{border-color:var(--ink)}
+.sz.on{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.btn-add{width:100%;padding:18px;background:var(--ink);color:var(--cream);border:none;cursor:pointer;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;position:relative;overflow:hidden;transition:color .5s;margin-bottom:12px;font-family:var(--font-body)}
+.btn-add::before{content:'';position:absolute;inset:0;background:var(--gold);transform:translateX(-101%);transition:transform .6s cubic-bezier(.16,1,.3,1)}
+.btn-add:hover::before{transform:translateX(0)}
+.btn-add span{position:relative}
+.btn-wish-m{width:100%;padding:14px;background:transparent;color:var(--ink);border:1px solid var(--border);cursor:pointer;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;font-family:var(--font-body);transition:border-color .3s,color .3s;margin-bottom:28px;display:flex;align-items:center;justify-content:center;gap:10px}
+.btn-wish-m:hover,.btn-wish-m.on{border-color:#c0504d;color:#c0504d}
+.btn-wish-m .hrt{transition:transform .3s}
+.btn-wish-m.on .hrt{transform:scale(1.3)}
+.m-details{padding-top:28px;border-top:1px solid var(--border)}
+.det-row{display:flex;justify-content:space-between;font-size:.65rem;color:var(--muted);padding:8px 0;border-bottom:1px solid var(--border)}
+.det-row:last-child{border-bottom:none}
+
+/* BAG DRAWER */
+.bag-ov{position:fixed;inset:0;z-index:3000;background:rgba(10,10,8,0);pointer-events:none;transition:background .4s}
+.bag-ov.open{pointer-events:all;background:rgba(10,10,8,.5);backdrop-filter:blur(4px)}
+.bag-drawer{position:absolute;top:0;right:0;bottom:0;width:420px;max-width:95vw;background:var(--cream);border-left:1px solid var(--border);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .65s cubic-bezier(.16,1,.3,1)}
+.bag-ov.open .bag-drawer{transform:translateX(0)}
+.bag-head{padding:32px 36px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.bag-head h3{font-family:var(--font-display);font-size:1.8rem;font-weight:300}
+.bag-close{background:none;border:none;cursor:pointer;font-size:1.2rem;color:var(--muted);transition:color .3s,transform .3s}
+.bag-close:hover{color:var(--ink);transform:rotate(90deg)}
+.bag-items{flex:1;overflow-y:auto}
+.bag-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:16px;padding:40px}
+.bag-empty p{font-family:var(--font-display);font-size:1.5rem;font-weight:300;color:var(--muted)}
+.bag-empty small{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.bag-item{display:grid;grid-template-columns:90px 1fr auto;gap:16px;padding:20px 36px;border-bottom:1px solid var(--border);align-items:center}
+.bag-item img{width:100%;height:120px;object-fit:cover;filter:saturate(.6)}
+.bi-name{font-size:.78rem;letter-spacing:.05em;margin-bottom:5px}
+.bi-meta{font-size:.62rem;color:var(--muted);margin-bottom:10px}
+.bi-price{font-family:var(--font-display);font-size:1.2rem;font-weight:300}
+.bi-rm{background:none;border:none;cursor:pointer;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);transition:color .3s;font-family:var(--font-body)}
+.bi-rm:hover{color:#c0504d}
+.bag-foot{padding:24px 36px 36px;border-top:1px solid var(--border)}
+.bag-total-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:24px}
+.bag-total-row span{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.bag-total-row strong{font-family:var(--font-display);font-size:1.8rem;font-weight:300}
+.btn-checkout{width:100%;padding:18px;background:var(--ink);color:var(--cream);border:none;cursor:pointer;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;position:relative;overflow:hidden;font-family:var(--font-body)}
+.btn-checkout::before{content:'';position:absolute;inset:0;background:var(--gold);transform:translateX(-101%);transition:transform .6s cubic-bezier(.16,1,.3,1)}
+.btn-checkout:hover::before{transform:translateX(0)}
+.btn-checkout span{position:relative}
+
+/* TOAST */
+.toast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--cream);padding:14px 36px;z-index:9999;font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;opacity:0;transition:opacity .4s,transform .4s;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* SCROLL REVEAL */
+.sr{opacity:0;transform:translateY(24px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+.sr.vis{opacity:1;transform:translateY(0)}
+
+/* FOOTER */
+footer{background:var(--ink);color:var(--cream);padding:100px 5% 60px}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:80px;padding-bottom:80px;border-bottom:1px solid rgba(245,240,232,.1);margin-bottom:60px}
+.f-brand .logo{color:var(--cream);font-size:2rem;display:block;margin-bottom:20px}
+.f-brand p{font-size:.75rem;line-height:2;color:rgba(245,240,232,.4);max-width:260px}
+.f-col h5{font-size:.55rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:24px}
+.f-col a{display:block;font-size:.78rem;color:rgba(245,240,232,.5);text-decoration:none;margin-bottom:14px;transition:color .3s,padding-left .3s;cursor:pointer}
+.f-col a:hover{color:var(--cream);padding-left:6px}
+.footer-bot{display:flex;justify-content:space-between;align-items:center}
+.footer-copy{font-size:.65rem;color:rgba(245,240,232,.3)}
+.footer-legal{display:flex;gap:32px}
+.footer-legal a{font-size:.65rem;color:rgba(245,240,232,.3);text-decoration:none}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .nav-center,.cur-sw,.nav-wish{display:none}
+  .hbg{display:flex}
+  .product-grid{grid-template-columns:repeat(2,1fr)}
+  .product-grid .fp{grid-column:span 2}
+  .product-grid .fp .prod-img{height:50vw}
+  footer .footer-top{grid-template-columns:1fr 1fr;gap:40px}
+  .modal-box{grid-template-columns:1fr}
+  .m-img-wrap{display:none}
+  .m-body{padding:40px 32px}
+}
+@media(max-width:540px){
+  .product-grid,.product-grid.two-col{grid-template-columns:1fr}
+  .product-grid .fp{grid-column:span 1}
+  .shop-header{flex-direction:column;align-items:flex-start;gap:8px}
+  footer .footer-top{grid-template-columns:1fr}
+  .bag-drawer{width:100vw}
+  .nav-bag{padding:8px 12px;font-size:.5rem}
+}
+</style>
 </head>
 <body>
 
-    <div class="ambient-glow"></div>
-    <div class="bg-watermark" id="watermark">CHIC</div>
+<div id="cursor"><div class="c-dot" id="cDot"></div><div class="c-ring" id="cRing"></div></div>
+<div id="curtain"><div class="cl">CHIC</div></div>
 
-    <div class="qv-overlay" id="qvModal">
-        <div class="qv-box">
-            <span class="close-btn" onclick="closeQV()">✕</span>
-            <div class="qv-img-side"><img id="qvImg" src=""></div>
-            <div class="qv-text-side">
-                <h2 id="qvTitle">Item Name</h2>
-                <p class="qv-price" id="qvPrice">$0.00</p>
-                <p id="qvDesc" style="font-size: 0.85rem; line-height: 2; color: rgba(255,255,255,0.5); margin-bottom: 30px;">
-                    Hand-tailored in our European atelier using sustainably sourced materials.
-                </p>
-                <div class="size-sel">
-                    <div class="size-btn" onclick="selSize(this)">S</div>
-                    <div class="size-btn active" onclick="selSize(this)">M</div>
-                    <div class="size-btn" onclick="selSize(this)">L</div>
-                </div>
-                <button class="cart-icon" style="width: 100%; height: 60px; font-weight: 700;" onclick="buyItem()">ADD TO BAG</button>
-            </div>
-        </div>
+<div id="loader"><div class="lw"><span>CHIC</span></div><div class="lb"></div></div>
+
+<div class="mq-strip"><div class="mq-track" id="mqTrack"></div></div>
+
+<nav id="nav">
+  <div class="logo" onclick="gotoPage('home')">CHIC</div>
+  <div class="nav-center">
+    <button class="nav-link" data-page="shop-new"   onclick="gotoPage('shop-new')">New Arrivals</button>
+    <button class="nav-link" data-page="shop-men"   onclick="gotoPage('shop-men')">Men</button>
+    <button class="nav-link" data-page="shop-women" onclick="gotoPage('shop-women')">Women</button>
+    <button class="nav-link" data-page="shop-bags"  onclick="gotoPage('shop-bags')">Bags</button>
+  </div>
+  <div class="nav-right">
+    <div class="cur-sw">
+      <button class="cur-btn on" onclick="setCur('USD',this)">USD</button>
+      <button class="cur-btn"    onclick="setCur('EUR',this)">EUR</button>
+      <button class="cur-btn"    onclick="setCur('GBP',this)">GBP</button>
     </div>
+    <button class="nav-wish" onclick="openDrawer('wish')" title="Wishlist">♡<span class="wbadge" id="wBadge">0</span></button>
+    <button class="nav-bag"  onclick="openDrawer('bag')">Bag<span class="bc" id="bCount">0</span></button>
+    <button class="hbg" id="hbg" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
 
-    <nav>
-        <div class="logo" onclick="showPage('home')">CHIC</div>
-        <div class="nav-links">
-            <a onclick="showPage('shop-new')" class="nav-item active">New Arrivals</a>
-            <a onclick="showPage('shop-men')" class="nav-item">Men</a>
-            <a onclick="showPage('shop-women')" class="nav-item">Women</a>
-            <a onclick="showPage('shop-bags')" class="nav-item">Bags</a>
-            <div class="cart-icon" id="cartCount">BAG (0)</div>
-        </div>
-    </nav>
+<!-- MOBILE MENU -->
+<div class="mob-menu" id="mobMenu">
+  <div class="mm-link" onclick="gotoPage('shop-new');toggleMenu()">New Arrivals</div>
+  <div class="mm-link" onclick="gotoPage('shop-men');toggleMenu()">Men</div>
+  <div class="mm-link" onclick="gotoPage('shop-women');toggleMenu()">Women</div>
+  <div class="mm-link" onclick="gotoPage('shop-bags');toggleMenu()">Bags</div>
+  <div class="mm-cur">
+    <span onclick="setCurMob('USD')">USD</span>
+    <span onclick="setCurMob('EUR')">EUR</span>
+    <span onclick="setCurMob('GBP')">GBP</span>
+  </div>
+</div>
 
-    <section id="home" class="page">
-        <div class="home-hero">
-            <div class="hero-text">
-                <p style="letter-spacing: 12px; opacity: 0.4; margin-bottom: 20px;">ESTABLISHED 2026</p>
-                <h1>Defined<br>By<br><span style="color: var(--accent);">Modernity</span></h1>
-                <button onclick="showPage('shop-new')" style="margin-top: 40px; background: white; border: none; padding: 20px 60px; letter-spacing: 5px; font-size: 0.7rem; text-transform: uppercase; cursor: pointer;">Shop Collection</button>
-            </div>
-            <div class="hero-img-box">
-                <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070">
-            </div>
-        </div>
-    </section>
+<!-- QUICK VIEW MODAL -->
+<div class="modal-ov" id="modal" onclick="handleMOvClick(event)">
+  <div class="modal-box">
+    <div class="m-img-wrap"><img id="mImg" src="" alt=""></div>
+    <div class="m-body">
+      <button class="m-close" onclick="closeModal()">✕</button>
+      <p class="m-cat"   id="mCat">Collection</p>
+      <h2 class="m-title" id="mTitle">Item</h2>
+      <p class="m-price"  id="mPrice">$0</p>
+      <div class="m-div"></div>
+      <p class="m-desc">Hand-tailored in our European atelier using sustainably sourced materials. Each piece embodies quiet luxury and architectural precision.</p>
+      <p class="m-label">Select Size</p>
+      <div class="sz-row">
+        <div class="sz" onclick="pickSz(this)">XS</div>
+        <div class="sz on" onclick="pickSz(this)">S</div>
+        <div class="sz" onclick="pickSz(this)">M</div>
+        <div class="sz" onclick="pickSz(this)">L</div>
+        <div class="sz" onclick="pickSz(this)">XL</div>
+      </div>
+      <button class="btn-add" onclick="addToBag()"><span>Add to Bag</span></button>
+      <button class="btn-wish-m" id="mWishBtn" onclick="toggleModalWish()">
+        <span class="hrt">♡</span><span id="mWishTxt">Save to Wishlist</span>
+      </button>
+      <div class="m-details">
+        <div class="det-row"><span>Material</span><span id="mMat">—</span></div>
+        <div class="det-row"><span>Origin</span><span>Crafted in Italy</span></div>
+        <div class="det-row"><span>Delivery</span><span>3–5 Business Days</span></div>
+        <div class="det-row"><span>Returns</span><span>30-Day Complimentary</span></div>
+      </div>
+    </div>
+  </div>
+</div>
 
-    <section id="shop-new" class="page active">
-        <div class="shop-container">
-            <h2 class="category-title">New Arrivals</h2>
-            <div class="product-grid">
-                <div class="item-card" onclick="openQV('Onyx Blazer', '$1,450', 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1920')">
-                    <div class="img-wrap"><img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1920"><div class="quick-view-hint">QUICK VIEW</div></div>
-                    <div class="item-meta"><span>Onyx Blazer</span><span>$1,450</span></div>
-                </div>
-                <div class="item-card" onclick="openQV('Silk Column', '$980', 'https://images.unsplash.com/photo-1539109132314-347f85417bd0?q=80&w=1974')">
-                    <div class="img-wrap"><img src="https://images.unsplash.com/photo-1539109132314-347f85417bd0?q=80&w=1974"><div class="quick-view-hint">QUICK VIEW</div></div>
-                    <div class="item-meta"><span>Silk Column</span><span>$980</span></div>
-                </div>
-                <div class="item-card" onclick="openQV('Void Trouser', '$620', 'https://images.unsplash.com/photo-1514316454349-750a7fd3da3a?q=80&w=1974')">
-                    <div class="img-wrap"><img src="https://images.unsplash.com/photo-1514316454349-750a7fd3da3a?q=80&w=1974"><div class="quick-view-hint">QUICK VIEW</div></div>
-                    <div class="item-meta"><span>Void Trouser</span><span>$620</span></div>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- BAG / WISH DRAWER -->
+<div class="bag-ov" id="bagOv" onclick="handleDrOvClick(event)">
+  <div class="bag-drawer">
+    <div class="bag-head">
+      <h3 id="drTitle">Your Bag</h3>
+      <button class="bag-close" onclick="closeDrawer()">✕</button>
+    </div>
+    <div class="bag-items" id="drItems"></div>
+    <div class="bag-foot" id="drFoot" style="display:none">
+      <div class="bag-total-row"><span>Total</span><strong id="drTotal">$0</strong></div>
+      <button class="btn-checkout"><span>Proceed to Checkout</span></button>
+    </div>
+  </div>
+</div>
 
-    <section id="shop-men" class="page">
-        <div class="shop-container">
-            <h2 class="category-title">Men</h2>
-            <div class="product-grid">
-                <div class="item-card" onclick="openQV('Monolith Coat', '$2,100', 'https://images.unsplash.com/photo-1488161628813-04466f872be2?q=80&w=1964')">
-                    <div class="img-wrap"><img src="https://images.unsplash.com/photo-1488161628813-04466f872be2?q=80&w=1964"><div class="quick-view-hint">QUICK VIEW</div></div>
-                    <div class="item-meta"><span>Monolith Coat</span><span>$2,100</span></div>
-                </div>
-                <div class="item-card" onclick="openQV('Raw Shirt', '$480', 'https://images.unsplash.com/photo-1504131598085-4cca8500b677?q=80&w=1969')">
-                    <div class="img-wrap"><img src="https://images.unsplash.com/photo-1504131598085-4cca8500b677?q=80&w=1969"><div class="quick-view-hint">QUICK VIEW</div></div>
-                    <div class="item-meta"><span>Raw Shirt</span><span>$480</span></div>
-                </div>
-            </div>
-        </div>
-    </section>
+<div class="toast" id="toast"></div>
 
-    <section id="shop-women" class="page">
-        <div class="shop-container">
-            <h2 class="category-title">Women</h2>
-            <div class="product-grid">
-                <div class="item-card" onclick="openQV('Ethereal Gown', '$3,400', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964')">
-                    <div class="img-wrap"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964"><div class="quick-view-hint">QUICK VIEW</div></div>
-                    <div class="item-meta"><span>Ethereal Gown</span><span>$3,400</span></div>
-                </div>
-                <div class="item-card" onclick="openQV('Structured Top', '$850', 'https://images.unsplash.com/photo-1496940850453-bb2597412fca?q=80&w=1974')">
-                    <div class="img-wrap"><img src="https://images.unsplash.com/photo-1496940850453-bb2597412fca?q=80&w=1974"><div class="quick-view-hint">QUICK VIEW</div></div>
-                    <div class="item-meta"><span>Structured Top</span><span>$850</span></div>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- ═══════ HOME ═══════ -->
+<section class="page active" id="home">
 
-    <section id="shop-bags" class="page">
-        <div class="shop-container">
-            <h2 class="category-title">Bags</h2>
-            <div class="product-grid">
-                <div class="item-card" onclick="openQV('Architect Tote', '$1,800', 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=2069')">
-                    <div class="img-wrap"><img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=2069"><div class="quick-view-hint">QUICK VIEW</div></div>
-                    <div class="item-meta"><span>Architect Tote</span><span>$1,800</span></div>
-                </div>
-                <div class="item-card" onclick="openQV('Onyx Clutch', '$950', 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=1974')">
-                    <div class="img-wrap"><img src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=1974"><div class="quick-view-hint">QUICK VIEW</div></div>
-                    <div class="item-meta"><span>Onyx Clutch</span><span>$950</span></div>
-                </div>
-            </div>
-        </div>
-    </section>
+  <!-- FULL-BLEED CINEMATIC HERO -->
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-vignette"></div>
+    <div class="hero-wm">CHIC</div>
+    <div class="hero-content">
+      <div class="hero-left">
+        <p class="hero-tag">SS — 2026 Collection</p>
+        <h1 class="hero-h1">Silence<br>Speaks<br><em>Loudest</em></h1>
+        <p class="hero-sub">Where architectural structure meets the fluidity of the human form. Pieces built to outlast every season.</p>
+        <button class="btn-primary" onclick="gotoPage('shop-new')"><span>Explore Collection</span><span class="arr">→</span></button>
+      </div>
+      <div class="hero-right">
+        <div class="hero-stat"><strong>47</strong><span>Pieces this season</span></div>
+        <div class="hero-stat"><strong>12</strong><span>Countries shipped</span></div>
+        <div class="hero-stat"><strong>100%</strong><span>Natural materials</span></div>
+      </div>
+    </div>
+    <div class="hero-scr" onclick="document.querySelector('.cat-strip').scrollIntoView({behavior:'smooth'})">
+      <div class="hero-scr-line"></div>Scroll
+    </div>
+  </div>
 
-    <footer>
-        <div class="f-col">
-            <div class="logo" style="font-size: 1.4rem; margin-bottom: 25px;">CHIC</div>
-            <p style="font-size: 0.8rem; line-height: 2; opacity: 0.4;">Defining the intersection of architecture and avant-garde fashion since 2026. Made for the global citizen.</p>
-        </div>
-        <div class="f-col"><h4>Collection</h4><a href="#" onclick="showPage('shop-men')">Men</a><a href="#" onclick="showPage('shop-women')">Women</a><a href="#" onclick="showPage('shop-bags')">Bags</a></div>
-        <div class="f-col"><h4>Support</h4><a href="#">Shipping</a><a href="#">Returns</a><a href="#">Contact</a></div>
-        <div class="f-col"><h4>Social</h4><a href="#">Instagram</a><a href="#">Twitter</a><a href="#">LinkedIn</a></div>
-    </footer>
+  <!-- SHOP BY CATEGORY STRIP -->
+  <div class="cat-strip sr">
+    <div class="cat-card" onclick="gotoPage('shop-new')">
+      <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1920" alt="New Arrivals">
+      <div class="cat-card-ov">
+        <p class="cat-label">Just In</p>
+        <h3 class="cat-name">New<br>Arrivals</h3>
+        <div class="cat-arrow">→</div>
+      </div>
+      <span class="cat-count">5 Pieces</span>
+    </div>
+    <div class="cat-card" onclick="gotoPage('shop-women')">
+      <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964" alt="Women">
+      <div class="cat-card-ov">
+        <p class="cat-label">Collection</p>
+        <h3 class="cat-name">Women</h3>
+        <div class="cat-arrow">→</div>
+      </div>
+      <span class="cat-count">2 Pieces</span>
+    </div>
+    <div class="cat-card" onclick="gotoPage('shop-men')">
+      <img src="https://images.unsplash.com/photo-1488161628813-04466f872be2?q=80&w=1964" alt="Men">
+      <div class="cat-card-ov">
+        <p class="cat-label">Collection</p>
+        <h3 class="cat-name">Men</h3>
+        <div class="cat-arrow">→</div>
+      </div>
+      <span class="cat-count">2 Pieces</span>
+    </div>
+  </div>
 
-    <script>
-        // PAGE SWITCHER
-        function showPage(id) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            
-            // Highlight active nav link
-            document.querySelectorAll('.nav-item').forEach(link => {
-                link.classList.remove('active');
-                if(link.innerText.toLowerCase().includes(id.replace('shop-', ''))) link.classList.add('active');
-            });
-            window.scrollTo(0, 0);
-        }
+  <!-- BENTO MOSAIC -->
+  <div class="bento sr">
+    <!-- tall left -->
+    <div class="bento-cell tall" onclick="openModal('Ethereal Gown',3400,'Women','https://images.unsplash.com/photo-1539109132314-347f85417bd0?q=80&w=1974','100% Silk Charmeuse')">
+      <img src="https://images.unsplash.com/photo-1539109132314-347f85417bd0?q=80&w=1974" alt="">
+      <div class="bento-cell-text"><p>Women's</p><h3>Silk Column<br>Dress</h3></div>
+    </div>
+    <!-- top centre -->
+    <div class="bento-cell" onclick="openModal('Onyx Blazer',1450,'New Arrivals','https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1920','Virgin Wool Blend')">
+      <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1920" alt="">
+      <div class="bento-cell-text"><p>New Arrivals</p><h3>Onyx<br>Blazer</h3></div>
+    </div>
+    <!-- top right -->
+    <div class="bento-cell" onclick="openModal('Architect Tote',1800,'Bags','https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=2069','Full-Grain Nappa Leather')">
+      <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=2069" alt="">
+      <div class="bento-cell-text"><p>Bags</p><h3>Architect<br>Tote</h3></div>
+    </div>
+    <!-- bottom centre + right (wide) -->
+    <div class="bento-cell wide" onclick="openModal('Monolith Coat',2100,'Men','https://images.unsplash.com/photo-1488161628813-04466f872be2?q=80&w=1964','Double-Faced Cashmere')">
+      <img src="https://images.unsplash.com/photo-1488161628813-04466f872be2?q=80&w=1964" alt="">
+      <div class="bento-cell-text"><p>Men's</p><h3>Monolith Coat</h3></div>
+    </div>
+  </div>
 
-        // QUICK VIEW
-        function openQV(name, price, img) {
-            document.getElementById('qvTitle').innerText = name;
-            document.getElementById('qvPrice').innerText = price;
-            document.getElementById('qvImg').src = img;
-            document.getElementById('qvModal').style.display = 'flex';
-        }
-        function closeQV() { document.getElementById('qvModal').style.display = 'none'; }
+  <!-- DARK QUOTE STRIP -->
+  <div class="quote-strip sr">
+    <div class="quote-mark">"</div>
+    <p class="quote-text">We do not design clothes. We design the feeling of entering a room and saying nothing — yet being heard by everyone.</p>
+    <p class="quote-attr">— Creative Director, CHIC Atelier</p>
+    <button class="btn-primary" style="margin-top:16px;opacity:1;animation:none" onclick="gotoPage('shop-new')"><span>Shop the Collection</span><span class="arr">→</span></button>
+  </div>
 
-        // SIZE SELECTOR
-        function selSize(btn) {
-            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        }
+</section>
 
-        // CART COUNTER
-        let items = 0;
-        function buyItem() {
-            items++;
-            document.getElementById('cartCount').innerText = `BAG (${items})`;
-            closeQV();
-        }
+<!-- ═══════ NEW ARRIVALS ═══════ -->
+<section class="page" id="shop-new">
+  <div class="shop-header sr"><div><p class="sh-cat">SS 2026</p><h2 class="sh-title">New Arrivals</h2></div><p class="sh-count">5 Pieces</p></div>
+  <div class="product-grid">
+    <div class="prod-card fp" onclick="openModal('Onyx Blazer',1450,'New Arrivals','https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1920','Virgin Wool Blend')">
+      <div class="prod-img"><img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1920" alt=""><div class="prod-img-ov"></div><div class="prod-qv">Quick View</div><div class="prod-tag">New</div></div>
+      <button class="card-wish" onclick="event.stopPropagation();cardWish(this,'Onyx Blazer',1450,'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1920')">♡</button>
+      <div class="prod-info"><div><p class="prod-name">Onyx Blazer</p><p class="prod-material">Virgin Wool Blend</p></div><span class="prod-price" data-base="1450"></span></div>
+    </div>
+    <div class="prod-card" onclick="openModal('Silk Column Dress',980,'New Arrivals','https://images.unsplash.com/photo-1539109132314-347f85417bd0?q=80&w=1974','100% Silk Charmeuse')">
+      <div class="prod-img"><img src="https://images.unsplash.com/photo-1539109132314-347f85417bd0?q=80&w=1974" alt=""><div class="prod-img-ov"></div><div class="prod-qv">Quick View</div></div>
+      <button class="card-wish" onclick="event.stopPropagation();cardWish(this,'Silk Column Dress',980,'https://images.unsplash.com/photo-1539109132314-347f85417bd0?q=80&w=1974')">♡</button>
+      <div class="prod-info"><div><p class="prod-name">Silk Column Dress</p><p class="prod-material">100% Silk Charmeuse</p></div><span class="prod-price" data-base="980"></span></div>
+    </div>
+    <div class="prod-card" onclick="openModal('Void Trouser',620,'New Arrivals','https://images.unsplash.com/photo-1514316454349-750a7fd3da3a?q=80&w=1974','Pressed Cotton Gabardine')">
+      <div class="prod-img"><img src="https://images.unsplash.com/photo-1514316454349-750a7fd3da3a?q=80&w=1974" alt=""><div class="prod-img-ov"></div><div class="prod-qv">Quick View</div></div>
+      <button class="card-wish" onclick="event.stopPropagation();cardWish(this,'Void Trouser',620,'https://images.unsplash.com/photo-1514316454349-750a7fd3da3a?q=80&w=1974')">♡</button>
+      <div class="prod-info"><div><p class="prod-name">Void Trouser</p><p class="prod-material">Pressed Cotton Gabardine</p></div><span class="prod-price" data-base="620"></span></div>
+    </div>
+    <div class="prod-card" onclick="openModal('Ethereal Gown',3400,'New Arrivals','https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964','Silk Georgette & Tulle')">
+      <div class="prod-img"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964" alt=""><div class="prod-img-ov"></div><div class="prod-qv">Quick View</div><div class="prod-tag">Exclusive</div></div>
+      <button class="card-wish" onclick="event.stopPropagation();cardWish(this,'Ethereal Gown',3400,'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964')">♡</button>
+      <div class="prod-info"><div><p class="prod-name">Ethereal Gown</p><p class="prod-material">Silk Georgette & Tulle</p></div><span class="prod-price" data-base="3400"></span></div>
+    </div>
+    <div class="prod-card" onclick="openModal('Architect Tote',1800,'New Arrivals','https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=2069','Full-Grain Nappa Leather')">
+      <div class="prod-img"><img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=2069" alt=""><div class="prod-img-ov"></div><div class="prod-qv">Quick View</div></div>
+      <button class="card-wish" onclick="event.stopPropagation();cardWish(this,'Architect Tote',1800,'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=2069')">♡</button>
+      <div class="prod-info"><div><p class="prod-name">Architect Tote</p><p class="prod-material">Full-Grain Nappa Leather</p></div><span class="prod-price" data-base="1800"></span></div>
+    </div>
+  </div>
+</section>
 
-        // WATERMARK SCROLL
-        window.addEventListener('scroll', () => {
-            const s = window.pageYOffset;
-            document.getElementById('watermark').style.letterSpacing = (s * 0.03 - 2) + 'vw';
-            document.getElementById('watermark').style.opacity = 0.01 + (s * 0.0001);
-        });
-    </script>
+<!-- ═══════ MEN ═══════ -->
+<section class="page" id="shop-men">
+  <div class="shop-header sr"><div><p class="sh-cat">Collection</p><h2 class="sh-title">Men</h2></div><p class="sh-count">2 Pieces</p></div>
+  <div class="product-grid two-col">
+    <div class="prod-card" onclick="openModal('Monolith Coat',2100,'Men','https://images.unsplash.com/photo-1488161628813-04466f872be2?q=80&w=1964','Double-Faced Cashmere')">
+      <div class="prod-img"><img src="https://images.unsplash.com/photo-1488161628813-04466f872be2?q=80&w=1964" alt=""><div class="prod-img-ov"></div><div class="prod-qv">Quick View</div></div>
+      <button class="card-wish" onclick="event.stopPropagation();cardWish(this,'Monolith Coat',2100,'https://images.unsplash.com/photo-1488161628813-04466f872be2?q=80&w=1964')">♡</button>
+      <div class="prod-info"><div><p class="prod-name">Monolith Coat</p><p class="prod-material">Double-Faced Cashmere</p></div><span class="prod-price" data-base="2100"></span></div>
+    </div>
+    <div class="prod-card" onclick="openModal('Raw Shirt',480,'Men','https://images.unsplash.com/photo-1504131598085-4cca8500b677?q=80&w=1969','Stonewashed Linen')">
+      <div class="prod-img"><img src="https://images.unsplash.com/photo-1504131598085-4cca8500b677?q=80&w=1969" alt=""><div class="prod-img-ov"></div><div class="prod-qv">Quick View</div></div>
+      <button class="card-wish" onclick="event.stopPropagation();cardWish(this,'Raw Shirt',480,'https://images.unsplash.com/photo-1504131598085-4cca8500b677?q=80&w=1969')">♡</button>
+      <div class="prod-info"><div><p class="prod-name">Raw Shirt</p><p class="prod-material">Stonewashed Linen</p></div><span class="prod-price" data-base="480"></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ WOMEN ═══════ -->
+<section class="page" id="shop-women">
+  <div class="shop-header sr"><div><p class="sh-cat">Collection</p><h2 class="sh-title">Women</h2></div><p class="sh-count">2 Pieces</p></div>
+  <div class="product-grid two-col">
+    <div class="prod-card" onclick="openModal('Ethereal Gown',3400,'Women','https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964','Silk Georgette & Tulle')">
+      <div class="prod-img"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964" alt=""><div class="prod-img-ov"></div><div class="prod-qv">Quick View</div></div>
+      <button class="card-wish" onclick="event.stopPropagation();cardWish(this,'Ethereal Gown',3400,'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964')">♡</button>
+      <div class="prod-info"><div><p class="prod-name">Ethereal Gown</p><p class="prod-material">Silk Georgette & Tulle</p></div><span class="prod-price" data-base="3400"></span></div>
+    </div>
+    <div class="prod-card" onclick="openModal('Structured Top',850,'Women','https://images.unsplash.com/photo-1496940850453-bb2597412fca?q=80&w=1974','Italian Brocade')">
+      <div class="prod-img"><img src="https://images.unsplash.com/photo-1496940850453-bb2597412fca?q=80&w=1974" alt=""><div class="prod-img-ov"></div><div class="prod-qv">Quick View</div></div>
+      <button class="card-wish" onclick="event.stopPropagation();cardWish(this,'Structured Top',850,'https://images.unsplash.com/photo-1496940850453-bb2597412fca?q=80&w=1974')">♡</button>
+      <div class="prod-info"><div><p class="prod-name">Structured Top</p><p class="prod-material">Italian Brocade</p></div><span class="prod-price" data-base="850"></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ BAGS ═══════ -->
+<section class="page" id="shop-bags">
+  <div class="shop-header sr"><div><p class="sh-cat">Collection</p><h2 class="sh-title">Bags</h2></div><p class="sh-count">2 Pieces</p></div>
+  <div class="product-grid two-col">
+    <div class="prod-card" onclick="openModal('Architect Tote',1800,'Bags','https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=2069','Full-Grain Nappa Leather')">
+      <div class="prod-img"><img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=2069" alt=""><div class="prod-img-ov"></div><div class="prod-qv">Quick View</div></div>
+      <button class="card-wish" onclick="event.stopPropagation();cardWish(this,'Architect Tote',1800,'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=2069')">♡</button>
+      <div class="prod-info"><div><p class="prod-name">Architect Tote</p><p class="prod-material">Full-Grain Nappa Leather</p></div><span class="prod-price" data-base="1800"></span></div>
+    </div>
+    <div class="prod-card" onclick="openModal('Onyx Clutch',950,'Bags','https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=1974','Patent Calfskin')">
+      <div class="prod-img"><img src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=1974" alt=""><div class="prod-img-ov"></div><div class="prod-qv">Quick View</div></div>
+      <button class="card-wish" onclick="event.stopPropagation();cardWish(this,'Onyx Clutch',950,'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=1974')">♡</button>
+      <div class="prod-info"><div><p class="prod-name">Onyx Clutch</p><p class="prod-material">Patent Calfskin</p></div><span class="prod-price" data-base="950"></span></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div class="f-brand"><span class="logo">CHIC</span><p>Defining the intersection of architecture and avant-garde fashion since 2026. Made for the global citizen who wears silence as a statement.</p></div>
+    <div class="f-col"><h5>Collections</h5><a onclick="gotoPage('shop-new')">New Arrivals</a><a onclick="gotoPage('shop-men')">Men</a><a onclick="gotoPage('shop-women')">Women</a><a onclick="gotoPage('shop-bags')">Bags</a></div>
+    <div class="f-col"><h5>Support</h5><a href="#">Shipping Info</a><a href="#">Returns</a><a href="#">Size Guide</a><a href="#">Contact</a></div>
+    <div class="f-col"><h5>Follow</h5><a href="#">Instagram</a><a href="#">Pinterest</a><a href="#">LinkedIn</a></div>
+  </div>
+  <div class="footer-bot">
+    <p class="footer-copy">© 2026 CHIC. All rights reserved.</p>
+    <div class="footer-legal"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Accessibility</a></div>
+  </div>
+</footer>
+
+<script>
+/* ── CURRENCY ── */
+const RATES={USD:1,EUR:0.92,GBP:0.79};
+const SYMS={USD:'$',EUR:'€',GBP:'£'};
+let curCode='USD';
+function fmt(base){return SYMS[curCode]+Math.round(base*RATES[curCode]).toLocaleString()}
+function refreshPrices(){
+  document.querySelectorAll('.prod-price[data-base]').forEach(el=>el.textContent=fmt(+el.dataset.base));
+  if(curItem) document.getElementById('mPrice').textContent=fmt(curItem.base);
+  renderDrawer();
+}
+function setCur(code,btn){
+  curCode=code;
+  document.querySelectorAll('.cur-btn').forEach(b=>b.classList.remove('on'));
+  if(btn)btn.classList.add('on');
+  refreshPrices();
+}
+function setCurMob(code){
+  curCode=code;
+  document.querySelectorAll('.cur-btn').forEach(b=>b.classList.toggle('on',b.textContent===code));
+  refreshPrices();
+  toast(code+' selected');
+}
+
+/* ── LOADER ── */
+window.addEventListener('load',()=>{
+  refreshPrices();
+  setTimeout(()=>{
+    document.getElementById('loader').classList.add('out');
+    setTimeout(()=>document.getElementById('loader').remove(),900);
+  },1800);
+});
+
+/* ── MARQUEE ── */
+const mqMsgs=['New Arrivals SS 2026','Free Worldwide Shipping','Crafted in Italy','Sustainable Luxury','Complimentary Returns'];
+const mqT=document.getElementById('mqTrack');
+const mqRow=[...mqMsgs,...mqMsgs,...mqMsgs,...mqMsgs].map(m=>`<span>${m}</span><span class="sep">·</span>`).join('');
+mqT.innerHTML=mqRow+mqRow;
+
+/* ── CURSOR ── */
+const cDot=document.getElementById('cDot'),cRing=document.getElementById('cRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cDot.style.left=mx+'px';cDot.style.top=my+'px';});
+(function animR(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;cRing.style.left=rx+'px';cRing.style.top=ry+'px';requestAnimationFrame(animR)})();
+function addHover(sel){document.querySelectorAll(sel).forEach(el=>{el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));})}
+addHover('a,button,.prod-card,.nav-link,.logo,.sz,.ed-img,.mm-link');
+document.querySelectorAll('.prod-img').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('zooming'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('zooming'));
+});
+
+/* ── NAV SCROLL ── */
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',window.scrollY>40));
+
+/* ── CURTAIN TRANSITION ── */
+const curtain=document.getElementById('curtain');
+let transitioning=false;
+function gotoPage(id){
+  if(transitioning)return;
+  transitioning=true;
+  curtain.classList.remove('out');
+  curtain.classList.add('in');
+  setTimeout(()=>{
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    const t=document.getElementById(id);
+    if(t)t.classList.add('active');
+    window.scrollTo(0,0);
+    document.querySelectorAll('.nav-link').forEach(l=>l.classList.toggle('active',l.dataset.page===id));
+    observeSR();
+    curtain.classList.remove('in');
+    curtain.classList.add('out');
+    setTimeout(()=>{curtain.classList.remove('out');transitioning=false;},560);
+  },500);
+}
+
+/* ── IMAGE ZOOM (cursor-tracked) ── */
+document.querySelectorAll('.prod-img').forEach(wrap=>{
+  const img=wrap.querySelector('img');
+  wrap.addEventListener('mousemove',e=>{
+    const r=wrap.getBoundingClientRect();
+    img.style.setProperty('--ox',((e.clientX-r.left)/r.width*100).toFixed(1)+'%');
+    img.style.setProperty('--oy',((e.clientY-r.top)/r.height*100).toFixed(1)+'%');
+    img.style.transform='scale(1.13)';
+  });
+  wrap.addEventListener('mouseleave',()=>{img.style.transform='';});
+});
+// modal zoom
+const mImgWrap=document.querySelector('.m-img-wrap'),mImgEl=document.getElementById('mImg');
+if(mImgWrap){
+  mImgWrap.addEventListener('mousemove',e=>{
+    const r=mImgWrap.getBoundingClientRect();
+    mImgEl.style.transformOrigin=((e.clientX-r.left)/r.width*100).toFixed(1)+'% '+((e.clientY-r.top)/r.height*100).toFixed(1)+'%';
+    mImgEl.style.transform='scale(1.1)';
+  });
+  mImgWrap.addEventListener('mouseleave',()=>{mImgEl.style.transform='';});
+}
+
+/* ── MODAL ── */
+let curItem=null;
+function openModal(title,base,cat,img,mat){
+  curItem={title,base,cat,img,mat};
+  document.getElementById('mTitle').textContent=title;
+  document.getElementById('mPrice').textContent=fmt(base);
+  document.getElementById('mCat').textContent=cat;
+  document.getElementById('mImg').src=img;
+  document.getElementById('mMat').textContent=mat||'Natural Fibre';
+  syncModalWish(title);
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){document.getElementById('modal').classList.remove('open');document.body.style.overflow='';curItem=null;}
+function handleMOvClick(e){if(e.target.id==='modal')closeModal();}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeDrawer();}});
+function pickSz(el){document.querySelectorAll('.sz').forEach(s=>s.classList.remove('on'));el.classList.add('on');}
+
+/* ── BAG STATE ── */
+let bagItems=[];
+function addToBag(){
+  if(!curItem)return;
+  const sz=document.querySelector('.sz.on')?.textContent||'M';
+  bagItems.push({...curItem,sz,id:Date.now()});
+  const bc=document.getElementById('bCount');
+  bc.textContent=bagItems.length;bc.classList.add('vis');
+  closeModal();toast('Added to Bag');
+}
+function removeBag(id){
+  bagItems=bagItems.filter(i=>i.id!==id);
+  const bc=document.getElementById('bCount');
+  bc.textContent=bagItems.length;bc.classList.toggle('vis',bagItems.length>0);
+  renderDrawer();
+}
+
+/* ── WISH STATE ── */
+let wishItems=[];
+function cardWish(btn,title,base,img){
+  const idx=wishItems.findIndex(w=>w.title===title);
+  if(idx===-1){wishItems.push({title,base,img,mat:'',cat:'Wishlist',id:title});btn.textContent='♥';btn.classList.add('on');toast('Saved to Wishlist');}
+  else{wishItems.splice(idx,1);btn.textContent='♡';btn.classList.remove('on');toast('Removed from Wishlist');}
+  const wb=document.getElementById('wBadge');wb.textContent=wishItems.length;wb.classList.toggle('vis',wishItems.length>0);
+}
+function toggleModalWish(){
+  if(!curItem)return;
+  const {title,base,img}=curItem;
+  const allBtns=document.querySelectorAll('.card-wish');
+  let matchBtn=null;
+  allBtns.forEach(b=>{if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes(`'${title}'`))matchBtn=b;});
+  if(matchBtn){cardWish(matchBtn,title,base,img);}
+  else{
+    const idx=wishItems.findIndex(w=>w.title===title);
+    if(idx===-1){wishItems.push({title,base,img,mat:'',cat:'Wishlist',id:title});toast('Saved to Wishlist');}
+    else{wishItems.splice(idx,1);toast('Removed from Wishlist');}
+    const wb=document.getElementById('wBadge');wb.textContent=wishItems.length;wb.classList.toggle('vis',wishItems.length>0);
+  }
+  syncModalWish(title);
+}
+function syncModalWish(title){
+  const wished=wishItems.some(w=>w.title===title);
+  const wb=document.getElementById('mWishBtn'),wt=document.getElementById('mWishTxt');
+  wb.classList.toggle('on',wished);
+  wb.querySelector('.hrt').textContent=wished?'♥':'♡';
+  wt.textContent=wished?'Saved to Wishlist':'Save to Wishlist';
+}
+function removeWish(id){
+  const item=wishItems.find(w=>w.id===id);
+  wishItems=wishItems.filter(w=>w.id!==id);
+  if(item){
+    document.querySelectorAll('.card-wish').forEach(b=>{
+      if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes(`'${item.title}'`)){b.textContent='♡';b.classList.remove('on');}
+    });
+  }
+  const wb=document.getElementById('wBadge');wb.textContent=wishItems.length;wb.classList.toggle('vis',wishItems.length>0);
+  renderDrawer();
+}
+
+/* ── DRAWER ── */
+let drMode='bag';
+function openDrawer(mode){
+  drMode=mode||'bag';
+  document.getElementById('drTitle').textContent=mode==='wish'?'Wishlist':'Your Bag';
+  renderDrawer();
+  document.getElementById('bagOv').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeDrawer(){document.getElementById('bagOv').classList.remove('open');document.body.style.overflow='';}
+function handleDrOvClick(e){if(e.target.id==='bagOv')closeDrawer();}
+function renderDrawer(){
+  const items=drMode==='wish'?wishItems:bagItems;
+  const cont=document.getElementById('drItems'),foot=document.getElementById('drFoot');
+  if(!items.length){
+    cont.innerHTML=`<div class="bag-empty"><p>${drMode==='wish'?'No saved items':'Your bag is empty'}</p><small>${drMode==='wish'?'Heart items to save them':'Add pieces to begin'}</small></div>`;
+    foot.style.display='none';return;
+  }
+  cont.innerHTML=items.map(it=>`
+    <div class="bag-item">
+      <img src="${it.img}" alt="${it.title}">
+      <div>
+        <p class="bi-name">${it.title}</p>
+        <p class="bi-meta">${it.sz?'Size '+it.sz:it.cat}</p>
+        <p class="bi-price">${fmt(it.base)}</p>
+      </div>
+      <button class="bi-rm" onclick="${drMode==='wish'?'removeWish':'removeBag'}(${drMode==='wish'?`'${it.id}'`:it.id})">Remove</button>
+    </div>`).join('');
+  if(drMode!=='wish'){
+    document.getElementById('drTotal').textContent=SYMS[curCode]+bagItems.reduce((s,i)=>s+Math.round(i.base*RATES[curCode]),0).toLocaleString();
+    foot.style.display='block';
+  } else foot.style.display='none';
+}
+
+/* ── MOBILE MENU ── */
+function toggleMenu(){
+  const h=document.getElementById('hbg'),m=document.getElementById('mobMenu');
+  h.classList.toggle('open');m.classList.toggle('open');
+  document.body.style.overflow=m.classList.contains('open')?'hidden':'';
+}
+
+/* ── TOAST ── */
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2600);
+}
+
+/* ── SCROLL REVEAL ── */
+function observeSR(){
+  const obs=new IntersectionObserver((entries)=>{
+    entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('vis'),i*100);obs.unobserve(e.target);}});
+  },{threshold:.15});
+  document.querySelectorAll('.sr:not(.vis)').forEach(el=>obs.observe(el));
+}
+observeSR();
+</script>
 </body>
 </html>
